@@ -73,6 +73,7 @@ ARG PKG_DEPS="\
     debsums \
     locales \
     language-pack-zh-hans \
+    lsb-release \
     libpq5 \
     ssl-cert \
     ca-certificates"
@@ -91,6 +92,7 @@ ENV PPG_DEPS=$PPG_DEPS
 RUN set -eux && \
    # 更新源地址
    sed -i s@http://*.*ubuntu.com@https://mirrors.aliyun.com@g /etc/apt/sources.list && \
+   sed -i 's?# deb-src?deb-src?g' /etc/apt/sources.list && \
    # 解决证书认证失败问题
    touch /etc/apt/apt.conf.d/99verify-peer.conf && echo >>/etc/apt/apt.conf.d/99verify-peer.conf "Acquire { https::Verify-Peer false }" && \
    # 更新系统软件
