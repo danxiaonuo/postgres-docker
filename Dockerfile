@@ -154,7 +154,7 @@ RUN set -eux && \
     rm -rf /var/lib/apt/lists/* ${DOWNLOAD_SRC}/*.deb && \
     # 创建相关目录
     mkdir -p /docker-entrypoint-initdb.d && chmod -R 775 /docker-entrypoint.sh && \
-    mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA"
+    mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA" && \
     mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove && \
