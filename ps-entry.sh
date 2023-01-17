@@ -288,6 +288,8 @@ _main() {
 	if [ "${1:0:1}" = '-' ]; then
 		set -- postgres "$@"
 	fi
+	
+	export PATH=$PATH:/usr/lib/postgresql/$PG_MAJOR/bin
 
 	if [ "$1" = 'postgres' ] && ! _pg_want_help "$@"; then
 		docker_setup_env
