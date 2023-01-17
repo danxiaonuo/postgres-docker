@@ -28,10 +28,10 @@ ARG PG_VERSION=${PG_MAJOR}_15.1-1
 ENV PG_VERSION=$PG_VERSION
 
 # 工作目录
-ARG PGDATA=/var/lib/postgresql/data
+ARG PGDATA=/data/db
 ENV PGDATA=$PGDATA
 # 数据目录
-ARG PGDATA=/var/lib/postgresql/data
+ARG PGDATA=/data/db
 ENV PGDATA=$PGDATA
 
 # 环境设置
@@ -67,6 +67,8 @@ ARG PKG_DEPS="\
     libaio1 \
     numactl \
     xz-utils \
+    zstd \
+    libnss-wrapper \
     gnupg2 \
     psmisc \
     libmecab2 \
@@ -79,12 +81,13 @@ ARG PKG_DEPS="\
     ca-certificates"
 ENV PKG_DEPS=$PKG_DEPS
 
+
 # PPG依赖包
 ARG PPG_DEPS="\
-    percona-ppg-server-15 \
+    percona-ppg-server-${PG_MAJOR} \
     percona-pgbackrest \
     percona-pgbouncer \
-    percona-pgaudit15-set-user \
+    percona-pgaudit${PG_MAJOR}-set-user \
     percona-pgbadger"
 ENV PPG_DEPS=$PPG_DEPS
 
@@ -142,22 +145,24 @@ COPY ["ps-entry.sh", "/docker-entrypoint.sh"]
 # ***** 下载postgres *****
 RUN set -eux && \
     # 设置postgres用户
-    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=/var/lib/postgresql --shell=/bin/bash postgres && \
-    mkdir -p /var/lib/postgresql && chown -R postgres:postgres /var/lib/postgresql && \
+    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=/data/db --shell=/bin/bash postgres && \
     # 下载postgres源
     wget --no-check-certificate https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb \
     -O ${DOWNLOAD_SRC}/percona-release_latest.$(lsb_release -sc)_all.deb && \
     # 安装percona-postgres
     dpkg -i ${DOWNLOAD_SRC}/*.deb && \
-    percona-release setup ppg-15 && \
+    percona-release setup ppg-${PG_MAJOR} && \
     # 安装依赖包
     DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends $PPG_DEPS && \
     # 删除临时文件
     rm -rf /var/lib/apt/lists/* ${DOWNLOAD_SRC}/*.deb && \
     # 创建相关目录
-    mkdir -p /docker-entrypoint-initdb.d && chmod -R 775 /docker-entrypoint.sh && \
+    mkdir -p /data/db /docker-entrypoint-initdb.d && \
+    chown -R postgres:postgres /data/db /docker-entrypoint-initdb.d && \
+    chmod -R 775 /data/db /docker-entrypoint-initdb.d && \
     mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA" && \
     mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
+    sed -i "/listen_addresses/c listen_addresses='*'" /etc/postgresql/*/main/postgresql.conf && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove && \
     cp -arf /root/.oh-my-zsh ${PGDATA}/.oh-my-zsh && \
@@ -167,9 +172,6 @@ RUN set -eux && \
  # ***** 容器信号处理 *****
 STOPSIGNAL SIGQUIT
 
-# ***** 监听端口 *****
-EXPOSE 5432
-
 # ***** 工作目录 *****
 WORKDIR ${PGDATA}
 
@@ -178,6 +180,12 @@ VOLUME ${PGDATA}
 
 # ***** 入口 *****
 ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# ***** 监听端口 *****
+EXPOSE 5432
+
+# ***** 用户 *****
+USER 999
 
 # ***** 执行命令 *****
 CMD ["postgres"]
