@@ -147,7 +147,7 @@ COPY ["ps-entry.sh", "/docker-entrypoint.sh"]
 # ***** 下载postgres *****
 RUN set -eux && \
     # 设置postgres用户
-    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=/data/db --shell=/bin/zsh postgres && \
+    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=/data/db --shell=/bin/bash postgres && \
     # 下载postgres源
     wget --no-check-certificate https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb \
     -O ${DOWNLOAD_SRC}/percona-release_latest.$(lsb_release -sc)_all.deb && \
@@ -159,9 +159,9 @@ RUN set -eux && \
     # 删除临时文件
     rm -rf /var/lib/apt/lists/* ${DOWNLOAD_SRC}/*.deb && \
     # 创建相关目录
-    mkdir -p /data/db /docker-entrypoint-initdb.d && \
-    chown -R postgres:postgres /data/db /docker-entrypoint-initdb.d && \
-    chmod -R 775 /data/db /docker-entrypoint-initdb.d /docker-entrypoint.sh && \
+    mkdir -p /docker-entrypoint-initdb.d && \
+    chown -R postgres:postgres /docker-entrypoint-initdb.d && \
+    chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh && \
     mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA" && \
     mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
     sed -i "/listen_addresses/c listen_addresses='*'" /etc/postgresql/*/main/postgresql.conf && \
@@ -179,12 +179,6 @@ VOLUME ${PGDATA}
 
 # ***** 入口 *****
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
-# ***** 设置zsh *****
-RUN set -eux && \
-    cp -arf /root/.oh-my-zsh ${PGDATA}/.oh-my-zsh && \
-    cp -arf /root/.zshrc ${PGDATA}/.zshrc && \
-    sed -i '5s#/root/.oh-my-zsh#${PGDATA}/.oh-my-zsh#' ${PGDATA}/.zshrc
 
 # ***** 监听端口 *****
 EXPOSE 5432
