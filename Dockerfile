@@ -115,6 +115,7 @@ RUN set -eux && \
    sed -i -e "s/bin\/ash/bin\/zsh/" /etc/passwd && \
    sed -i -e 's/mouse=/mouse-=/g' /usr/share/vim/vim*/defaults.vim && \
    locale-gen zh_CN.UTF-8 && localedef -f UTF-8 -i zh_CN zh_CN.UTF-8 && locale-gen && \
+   localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 && \
    /bin/zsh
 
 # grab gosu for easy step-down from root
@@ -165,11 +166,8 @@ RUN set -eux && \
     mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
     sed -i "/listen_addresses/c listen_addresses='*'" /etc/postgresql/*/main/postgresql.conf && \
     rm -rf /var/lib/apt/lists/* && \
-    apt-get purge -y --auto-remove && \
-    cp -arf /root/.oh-my-zsh ${PGDATA}/.oh-my-zsh && \
-    cp -arf /root/.zshrc ${PGDATA}/.zshrc && \
-    sed -i '5s#/root/.oh-my-zsh#${PGDATA}/.oh-my-zsh#' ${PGDATA}/.zshrc
-    
+    apt-get purge -y --auto-remove
+   
  # ***** 容器信号处理 *****
 STOPSIGNAL SIGQUIT
 
@@ -181,6 +179,12 @@ VOLUME ${PGDATA}
 
 # ***** 入口 *****
 ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# ***** 设置zsh *****
+RUN set -eux && \
+    cp -arf /root/.oh-my-zsh ${PGDATA}/.oh-my-zsh && \
+    cp -arf /root/.zshrc ${PGDATA}/.zshrc && \
+    sed -i '5s#/root/.oh-my-zsh#${PGDATA}/.oh-my-zsh#' ${PGDATA}/.zshrc
 
 # ***** 监听端口 *****
 EXPOSE 5432
