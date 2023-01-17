@@ -21,11 +21,12 @@ ENV DOCKER_IMAGE_OS=$DOCKER_IMAGE_OS
 ARG DOCKER_IMAGE_TAG=22.04
 ENV DOCKER_IMAGE_TAG=$DOCKER_IMAGE_TAG
 
-# mysql版本号
+# PG版本号
 ARG PG_MAJOR=15
 ENV MYSQL_MAJOR=$PG_MAJOR
 ARG PG_VERSION=${PG_MAJOR}_15.1-1
 ENV PG_VERSION=$PG_VERSION
+ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
 
 # 工作目录
 ARG PGDATA=/data/db
@@ -145,7 +146,7 @@ COPY ["ps-entry.sh", "/docker-entrypoint.sh"]
 # ***** 下载postgres *****
 RUN set -eux && \
     # 设置postgres用户
-    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=/data/db --shell=/bin/bash postgres && \
+    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=/data/db --shell=/bin/zsh postgres && \
     # 下载postgres源
     wget --no-check-certificate https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb \
     -O ${DOWNLOAD_SRC}/percona-release_latest.$(lsb_release -sc)_all.deb && \
