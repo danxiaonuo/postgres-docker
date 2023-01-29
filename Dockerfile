@@ -162,7 +162,6 @@ RUN set -eux && \
     mkdir -p /docker-entrypoint-initdb.d && \
     chown -R postgres:postgres /docker-entrypoint-initdb.d && \
     chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh && \
-    mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA" && \
     mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
     sed -i "/listen_addresses/c listen_addresses='*'" /etc/postgresql/*/main/postgresql.conf && \
     rm -rf /var/lib/apt/lists/* && \
