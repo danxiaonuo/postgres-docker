@@ -290,7 +290,7 @@ _main() {
 	fi
 	
 	export PATH=$PATH:/usr/lib/postgresql/$PG_MAJOR/bin
-
+	
 	if [ "$1" = 'postgres' ] && ! _pg_want_help "$@"; then
 		docker_setup_env
 		# setup data directories and permissions (when run as root)
@@ -334,6 +334,11 @@ _main() {
 			echo 'PostgreSQL Database directory appears to contain a database; Skipping initialization'
 			echo
 		fi
+		
+		cp -arf /root/.oh-my-zsh ${PGDATA}/.oh-my-zsh && \
+                cp -arf /root/.zshrc ${PGDATA}/.zshrc && \
+                sed -i '5s#/root/.oh-my-zsh#${PGDATA}/.oh-my-zsh#' ${PGDATA}/.zshrc
+
 	fi
 
 	exec "$@"
