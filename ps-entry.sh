@@ -335,9 +335,9 @@ _main() {
 			echo
 		fi
 		
-		cp -arf /root/.oh-my-zsh ${PGDATA}/.oh-my-zsh && \
-                cp -arf /root/.zshrc ${PGDATA}/.zshrc && \
-                sed -i '5s#/root/.oh-my-zsh#${PGDATA}/.oh-my-zsh#' ${PGDATA}/.zshrc
+		cp -arf /root/.oh-my-zsh ${PGDATA}/.oh-my-zsh
+                cp -arf /root/.zshrc ${PGDATA}/.zshrc
+                sed -i "5s#/root/.oh-my-zsh#${PGDATA}/.oh-my-zsh#" ${PGDATA}/.zshrc
 
 	fi
 
