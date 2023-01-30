@@ -160,16 +160,13 @@ RUN set -eux && \
     rm -rf /var/lib/apt/lists/* ${DOWNLOAD_SRC}/*.deb && \
     # 创建相关目录
     mkdir -p /docker-entrypoint-initdb.d && \
-    chown -R postgres:postgres /docker-entrypoint-initdb.d && \
-    chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh && \
-    mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod 777 "$PGDATA" && \
+    chown -R postgres:postgres /docker-entrypoint-initdb.d /docker-entrypoint.sh /root && \
+    chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh /root && \
+    mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod -R 777 "$PGDATA" && \
     mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
     sed -i "/listen_addresses/c listen_addresses='*'" /etc/postgresql/*/main/postgresql.conf && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove
-
-# ***** 入口 *****
-ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # ***** 容器信号处理 *****
 STOPSIGNAL SIGQUIT
@@ -179,6 +176,9 @@ WORKDIR ${PGDATA}
 
 # ***** 挂载目录 *****
 VOLUME ${PGDATA}
+
+# ***** 入口 *****
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # ***** 监听端口 *****
 EXPOSE 5432
