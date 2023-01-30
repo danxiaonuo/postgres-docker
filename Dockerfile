@@ -147,7 +147,7 @@ COPY ["ps-entry.sh", "/docker-entrypoint.sh"]
 # ***** 下载postgres *****
 RUN set -eux && \
     # 设置postgres用户
-    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=/data/db --shell=/bin/bash postgres && \
+    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=${PGDATA} --shell=/bin/zsh postgres && \
     # 下载postgres源
     wget --no-check-certificate https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb \
     -O ${DOWNLOAD_SRC}/percona-release_latest.$(lsb_release -sc)_all.deb && \
@@ -167,8 +167,11 @@ RUN set -eux && \
     sed -i "/listen_addresses/c listen_addresses='*'" /etc/postgresql/*/main/postgresql.conf && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove
-   
- # ***** 容器信号处理 *****
+
+# ***** 入口 *****
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# ***** 容器信号处理 *****
 STOPSIGNAL SIGQUIT
 
 # ***** 工作目录 *****
@@ -176,9 +179,6 @@ WORKDIR ${PGDATA}
 
 # ***** 挂载目录 *****
 VOLUME ${PGDATA}
-
-# ***** 入口 *****
-ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # ***** 监听端口 *****
 EXPOSE 5432
