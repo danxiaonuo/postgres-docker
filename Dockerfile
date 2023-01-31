@@ -166,7 +166,7 @@ RUN set -eux && \
     mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
     rm -rf /etc/postgresql /var/lib/postgresql  && \
     sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf && \
-    sed -i "/listen_addresses/c listen_addresses='*'" /usr/share/postgresql/${PG_MAJOR}/postgresql.conf && \
+    sed -i "/listen_addresses/c listen_addresses='*'" /usr/share/postgresql/${PG_MAJOR}/postgresql.conf.sample && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove
 
