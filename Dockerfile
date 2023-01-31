@@ -48,6 +48,7 @@ ARG PKG_DEPS="\
     zsh \
     bash \
     bash-completion \
+    sudo \
     dnsutils \
     iproute2 \
     net-tools \
@@ -110,6 +111,9 @@ RUN set -eux && \
    ln -sf /usr/share/zoneinfo/${TZ} /etc/localtime && \
    # 更新时间
    echo ${TZ} > /etc/timezone && \
+   # sudo权限
+   sed -i 's/^Defaults.*.requiretty/#Defaults    requiretty/' /etc/sudoers && \
+   sed -i '$a\postgres  ALL=(ALL)  NOPASSWD:/bin/mkdir,/bin/chmod,/bin/chown' /etc/sudoers && \
    # 更改为zsh
    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" || true && \
    sed -i -e "s/bin\/ash/bin\/zsh/" /etc/passwd && \
