@@ -36,8 +36,8 @@ _is_sourced() {
 docker_create_db_directories() {
 	local user; user="$(id -u)"
 
-	mkdir -p "$PGDATA"
-	chmod 700 "$PGDATA"
+	sudo mkdir -p "$PGDATA"
+        sudo chmod -R 700 "$PGDATA" && sudo chown -R postgres:postgres "$PGDATA"
 
 	# ignore failure since it will be fine when using the image provided directory; see also https://github.com/docker-library/postgres/pull/289
 	mkdir -p /var/run/postgresql || :
@@ -335,9 +335,8 @@ _main() {
 			echo
 		fi
 		
-		cp -arf /root/.oh-my-zsh ${PGDATA}/.oh-my-zsh
-                cp -arf /root/.zshrc ${PGDATA}/.zshrc
-                sed -i "5s#/root/.oh-my-zsh#${PGDATA}/.oh-my-zsh#" ${PGDATA}/.zshrc
+		cp -arf /root/.oh-my-zsh ${HOME}/.oh-my-zsh
+                cp -arf /root/.zshrc ${HOME}/.zshrc
 
 	fi
 
