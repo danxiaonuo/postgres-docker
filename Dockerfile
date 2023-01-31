@@ -120,7 +120,7 @@ RUN set -eux && \
 
 # grab gosu for easy step-down from root
 # https://github.com/tianon/gosu/releases
-ENV GOSU_VERSION 1.14
+ENV GOSU_VERSION 1.16
 RUN set -eux; \
 	savedAptMark="$(apt-mark showmanual)"; \
 	apt-get update; \
@@ -164,7 +164,8 @@ RUN set -eux && \
     chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh /root && \
     mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod -R 777 "$PGDATA" && \
     mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
-    sed -i "/listen_addresses/c listen_addresses='*'" /etc/postgresql/*/main/postgresql.conf && \
+    sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf && \
+    sed -i "/listen_addresses/c listen_addresses='*'" /usr/share/postgresql/${PG_MAJOR}/postgresql.conf && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get purge -y --auto-remove
 
