@@ -80,6 +80,9 @@ ARG PKG_DEPS="\
     lsb-release \
     libpq5 \
     ssl-cert \
+    libdbd-pg-perl \
+    libdbi-perl \
+    perl-modules \
     ca-certificates"
 ENV PKG_DEPS=$PKG_DEPS
 
@@ -162,10 +165,11 @@ RUN set -eux && \
     DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends $PPG_DEPS && \
     # 删除临时文件
     rm -rf /var/lib/apt/lists/* ${DOWNLOAD_SRC}/*.deb && \
-    # 创建相关目录
+    # 安装postgresqltuner
+    wget https://raw.githubusercontent.com/jfcoz/postgresqltuner/master/postgresqltuner.pl -O /bin/postgresqltuner.pl && \
     mkdir -p /docker-entrypoint-initdb.d && \
-    chown -R postgres:postgres /docker-entrypoint-initdb.d /docker-entrypoint.sh /root && \
-    chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh /root && \
+    chown -R postgres:postgres /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
+    chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
     mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod -R 777 "$PGDATA" && \
     mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
     rm -rf /etc/postgresql /var/lib/postgresql  && \
