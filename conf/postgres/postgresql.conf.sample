@@ -1,0 +1,800 @@
+# -----------------------------
+# PostgreSQL 配置文件
+# -----------------------------
+
+#------------------------------------------------------------------------------
+# 文件位置
+#------------------------------------------------------------------------------
+
+# 这些变量的默认值由 -D 命令行驱动
+# 选项或 PGDATA 环境变量，此处表示为 ConfigDir。
+# 设置服务器的数据目录
+# data_directory = 'ConfigDir'
+# 设置服务器的"hba"配置文件
+# hba_file = 'ConfigDir/pg_hba.conf'
+# 设置服务器的"ident"配置文件
+# ident_file = 'ConfigDir/pg_ident.conf'
+
+# 如果未明确设置 external_pid_file，则不会写入额外的 PID 文件。
+# 将 postmaster PID 写入指定文件
+# external_pid_file = ''
+
+#------------------------------------------------------------------------------
+# 连接和认证
+#------------------------------------------------------------------------------
+
+# - 连接设置 -
+
+# 设置要监听的主机名或 IP 地址
+listen_addresses = '*'
+# 设置服务器监听的TCP端口
+port = 5432
+# 设置最大并发连接数
+# max_connections = 9999
+# 设置为超级用户保留的连接槽数
+superuser_reserved_connections = 3 
+# 设置将创建 Unix 域套接字的目录
+unix_socket_directories = '/var/run/postgresql'
+# 设置 Unix 域套接字的所属组
+# unix_socket_group = ''
+# 设置 Unix 域套接字的访问权限
+# unix_socket_permissions = 0777 
+# 通过 Bonjour 启用广告服务器
+# bonjour = off
+# 设置 Bonjour 服务名称
+bonjour_name = ''
+
+# TCP 设置
+# keepalive空闲时间
+tcp_keepalives_idle = 60
+# keepalive间隔时间
+tcp_keepalives_interval = 10
+# keepalive计数 
+tcp_keepalives_count = 10 
+# TCP 用户超时 
+# tcp_user_timeout = 0
+# 设置运行查询时检查断开连接的时间间隔          
+# client_connection_check_interval = 0
+
+# - 验证 -
+# 设置完成客户端身份验证的最大允许时间
+# authentication_timeout = 1min
+# 选择加密密码的算法
+# password_encryption = scram-sha-256
+# 启用每个数据库的用户名
+# db_user_namespace = off
+
+# 使用 Kerberos 的 GSSAPI
+# 设置 Kerberos 服务器密钥文件的位置
+# krb_server_keyfile = 'FILE:${sysconfdir}/krb5.keytab'
+# 设置是否应将 Kerberos 和 GSSAPI 用户名视为不区分大小写
+# krb_caseins_users = off
+  
+
+
+#------------------------------------------------------------------------------
+# 资源使用情况(WAL除外)
+#------------------------------------------------------------------------------
+
+# - 内存 -
+
+# 设置服务器使用的共享内存缓冲区的数量
+# 计算公式: (1G内存为256MB,250G内存为:256*250=64000MB)
+# shared_buffers = 1GB 
+# 在 Linux 或 Windows 上使用大页面
+# huge_pages = on 
+# 应该请求的大页面的大小
+# huge_page_size = 0
+# 设置每个会话使用的临时缓冲区的最大数量
+# 计算公式: (1G内存为128MB,250G内存为:256*250=32000MB)
+# temp_buffers = 32000MB 
+# 设置同时准备的交易的最大数量
+# max_prepared_transactions = 0
+# 设置用于查询工作区的最大内存
+# 减少外部文件排序
+work_mem = 64kB
+# 用于哈希表的 work_mem 的倍数
+# hash_mem_multiplier = 2.0
+# 设置用于维护操作的最大内存
+# 加速建立索引
+maintenance_work_mem = 512MB
+# 设置每个 autovacuum 工作进程使用的最大内存
+# 加速垃圾回收
+autovacuum_work_mem = 512MB
+# 设置用于逻辑解码的最大内存
+logical_decoding_work_mem = 512MB
+# 服务器的执行堆栈的最大安全深度
+# max_stack_depth = 2MB
+# 服务器应用于主共享内存区域的共享内存实现
+# shared_memory_type = mmap
+# 选择用于主共享内存区域的共享内存实现
+dynamic_shared_memory_type = mmap
+# 启动时保留的动态共享内存量
+# min_dynamic_shared_memory = 0MB
+
+# - 磁盘 -
+
+# 限制每个进程使用的所有临时文件的总大小
+# temp_file_limit = -1
+
+# - 内核资源使用 -
+
+# 设置每个服务器进程同时打开文件的最大数量
+max_files_per_process = 65535
+
+# - 基于代价的清理延迟 -
+
+# 进程超过代价限制后将休眠的时间长度，以毫秒计。
+vacuum_cost_delay = 0
+# 清理一个在共享缓存中找到的缓冲区的估计代价
+# vacuum_cost_page_hit = 1
+# 清理一个必须从磁盘上读取的缓冲区的代价
+# vacuum_cost_page_miss = 2
+# 当清理修改一个之前干净的块时需要花费的估计代价
+# vacuum_cost_page_dirty = 20
+# 将导致清理进程休眠的累计代价
+# vacuum_cost_limit = 200
+
+
+# - 后台写入器 -
+
+# 后台编写器在回合之间的睡眠时间
+# 刷shared buffer脏页的进程调度间隔
+bgwriter_delay = 10ms
+# 在每个轮次中，不超过这么多个缓冲区将被后台写入器写出。
+# 后台编写器每轮要刷新的最大 LRU 页面数
+bgwriter_lru_maxpages = 1000
+# 每一轮次要写的脏缓冲区的数目基于最近几个轮次中服务器进程需要的新缓冲区的数目
+# 每轮释放的平均缓冲区使用量的倍数
+bgwriter_lru_multiplier = 10.0
+# 先前执行的写入被刷新到磁盘之前的页数
+# bgwriter_flush_after = 512kB
+
+
+# - 异步行为 -
+
+# 先前执行的写入被刷新到磁盘之前的页数
+# backend_flush_after = 0
+# 磁盘子系统可以有效处理的并发请求数
+effective_io_concurrency = 2
+# 用于维护工作的 effective_io_concurrency 的变体
+# 代表许多客户端会话完成的维护工作
+# maintenance_io_concurrency = 10
+# 设置系统能够支持的后台进程的最大数量
+max_worker_processes = 8
+# 设置每个执行节点的最大并行进程数
+max_parallel_workers_per_gather = 4
+# 设置每个维护操作的最大并行进程数
+max_parallel_maintenance_workers = 4
+# 设置系统可以支持并行操作的最大工作线程数
+max_parallel_workers = 8
+# 控制 Gather 和 Gather Merge 是否也运行子计划
+# parallel_leader_participation = on
+# 快照太旧而无法读取快照拍摄后更改的页面之前的时间
+# old_snapshot_threshold = -1
+
+#------------------------------------------------------------------------------
+# 写前日志
+#------------------------------------------------------------------------------
+
+# - 设置 -
+
+# 设置写入 WAL 的信息级别
+wal_level = logical
+# 强制将更新同步到磁盘
+fsync = on
+# 设置当前事务的同步级别
+synchronous_commit = off
+# 选择用于强制 WAL 更新到磁盘的方法
+# open_datasync（用open()选项O_DSYNC写 WAL 文件）
+# fdatasync（在每次提交时调用fdatasync()）
+# fsync（在每次提交时调用fsync()）
+# fsync_writethrough（在每次提交时调用fsync()，强制任何磁盘写高速缓存的直通写）
+# open_sync（用open()选项O_SYNC写 WAL 文件）
+wal_sync_method = open_sync
+# 在检查点后首次修改时将整页写入 WAL
+full_page_writes = off
+# 在检查点后首次修改时将整页写入 WAL
+wal_log_hints = off
+# 使用指定方法压缩写入 WAL 文件的整页写入
+wal_compression = off
+# 在首次使用前将零写入新的 WAL 文件
+# wal_init_zero = on
+# 通过重命名回收 WAL 文件
+# wal_recycle = on
+# 为 WAL 设置共享内存中的磁盘页面缓冲区数
+wal_buffers = 1GB
+# 在 WAL 编写器中执行的 WAL 刷新之间的时间
+wal_writer_delay = 10ms
+# 触发刷新的 WAL 编写器写出的 WAL 数量
+# wal_writer_flush_after = 1MB
+# 要 fsync 而不是写入 WAL 的新文件的最小大小
+# wal_skip_threshold = 2MB
+# 设置事务提交和将 WAL 刷新到磁盘之间的延迟（以微秒为单位）
+commit_delay = 20
+# 设置执行 commit_delay 之前所需的最小并发打开事务数
+commit_siblings = 9
+
+# - 检查 -
+# 设置自动 WAL 检查点之间的最长时间
+checkpoint_timeout = 55min
+# 在检查点期间刷新脏缓冲区所花费的时间，作为检查点间隔的一部分
+checkpoint_completion_target = 0.9
+# 先前执行的写入被刷新到磁盘之前的页数
+# checkpoint_flush_after = 256kB
+# 如果 WAL 卷触发的检查点发生得太频繁，则设置警告前的最长时间
+# checkpoint_warning = 30s
+# 设置触发检查点的 WAL 大小
+max_wal_size = 8GB
+# 设置将 WAL 缩小到的最小大小
+min_wal_size = 2GB
+
+# - 恢复期间预取 -
+
+# 在恢复期间预取引用块
+# 在恢复期间是否尝试预取 WAL 中引用但尚未在缓冲池中的块
+# recovery_prefetch = try
+# 恢复期间在 WAL 中提前读取的缓冲区大小
+# wal_decode_buffer_size = 512kB
+
+# - 存档 -
+# 允许使用 archive_command 归档 WAL 文件
+archive_mode = on
+# 设置将被调用以归档 WAL 文件的库
+# archive_library = ''
+# 设置将被调用以归档 WAL 文件的 shell 命令
+# archive_command = ''
+# 设置在强制切换到下一个 WAL 文件之前等待的时间量
+# archive_timeout = 0 
+
+# - 归档文件恢复 -
+
+# 这些仅用于恢复模式
+# 设置将被调用以检索归档 WAL 文件的 shell 命令
+# restore_command = '' 
+# 设置将在每个重启点执行的 shell 命令
+# archive_cleanup_command = ''
+# 设置恢复结束时执行一次的shell命令
+# recovery_end_command = ''
+
+
+# - 恢复目标 -
+
+# 仅在执行目标恢复时设置这些
+# 设置为"立即"以在达到一致状态后立即结束恢复
+# recovery_target = ''
+# 设置恢复将进行到的命名还原点
+# recovery_target_name = ''
+# 设置恢复将进行到的时间戳
+# recovery_target_time = ''
+# 设置恢复将进行到的事务 ID
+# recovery_target_xid = ''
+# 设置恢复将进行到的预写日志位置的 LSN
+# recovery_target_lsn = ''
+# 设置是否包含或排除具有恢复目标的事务
+# recovery_target_inclusive = on
+# 指定恢复到的时间线
+# recovery_target_timeline = 'latest'
+# 设置达到恢复目标时要执行的操作
+# recovery_target_action = 'pause'
+
+#------------------------------------------------------------------------------
+# 复制
+#------------------------------------------------------------------------------
+
+
+# - 发送服务器 -
+
+# 在将发送复制数据的主服务器和任何备用服务器上设置这些参数
+
+# 设置同时运行的 WAL 发送进程的最大数量
+# max_wal_senders = 10
+# 设置同时定义的复制槽的最大数量
+# max_replication_slots = 10
+# 设置为备用服务器保留的 WAL 文件的大小 
+# wal_keep_size = 0
+# 设置复制槽可以保留的最大 WAL 大小
+# max_slot_wal_keep_size = -1
+# 设置等待 WAL 复制的最长时间
+# wal_sender_timeout = 60s
+# 收集事务提交时间 
+# track_commit_timestamp = off
+
+
+# - 主服务器 -
+
+# 在备用服务器上忽略这些设置
+
+# 同步备用数据库的数量和潜在同步备用数据库的名称列表
+# synchronous_standby_names = ''
+# 应延迟 VACUUM 和 HOT 清理的事务数
+# vacuum_defer_cleanup_age = 0
+
+# - 备用服务器 -
+
+# 在主服务器上忽略这些设置
+# 设置用于连接到发送服务器的连接字符串
+# primary_conninfo = ''
+# 设置要在发送服务器上使用的复制槽的名称               
+# primary_slot_name = '' 
+# 指定一个触发器文件，该文件的存在会结束后备机中的恢复             
+# promote_trigger_file = ''
+# 在恢复期间允许连接和查询           
+# hot_standby = on
+# 设置当热备用服务器正在处理归档 WAL 数据时取消查询前的最大延迟                                                       
+# max_standby_archive_delay = 30s
+# 设置当热备服务器正在处理流式 WAL 数据时取消查询前的最大延迟                                  
+# max_standby_streaming_delay = 30s
+# 如果没有配置永久插槽，则设置 WAL 接收器是否应创建临时复制插槽                               
+# wal_receiver_create_temp_slot = off
+# 设置 WAL 接收器状态报告到发送服务器之间的最大间隔                         
+# wal_receiver_status_interval = 10s
+# 允许从热备份到主数据库的反馈，以避免查询冲突                          
+# hot_standby_feedback = off
+# 设置从发送服务器接收数据的最长等待时间                                   
+# wal_receiver_timeout = 60s
+# 设置在尝试失败后重试检索 WAL 之前等待的时间                                   
+# wal_retrieve_retry_interval = 5s
+# 设置恢复期间应用更改的最小延迟                 
+# recovery_min_apply_delay = 0        
+
+# - 用户 -
+
+# 在发布服务器上，这些设置将被忽略。
+# 最大逻辑复制工作进程数
+# max_logical_replication_workers = 4
+# 每个订阅的表同步工作者的最大数量
+# max_sync_workers_per_subscription = 2
+
+#------------------------------------------------------------------------------
+# 查询调优
+#------------------------------------------------------------------------------
+
+# - Planner方法配置 -
+# 使计划者能够使用异步追加计划
+# enable_async_append = on
+# 使计划者能够使用位图扫描计划
+# enable_bitmapscan = on
+# 使计划者能够使用收集合并计划
+# enable_gathermerge = on
+# 使计划者能够使用散列聚合计划
+# enable_hashagg = on
+# 允许计划器使用散列连接计划
+# enable_hashjoin = on
+# 允许计划程序使用增量排序步骤
+# enable_incremental_sort = on
+# 使计划者能够使用索引扫描计划
+# enable_indexscan = on
+# 使计划者能够使用仅索引扫描计划
+# enable_indexonlyscan = on
+# 使计划者能够使用物化
+# enable_material = on
+# 使计划者能够使用记忆
+# enable_memoize = on
+# 使计划者能够使用合并连接计划
+# enable_mergejoin = on
+# 使计划者能够使用嵌套循环连接计划
+# enable_nestloop = on
+# 使计划者能够使用并行追加计划
+# enable_parallel_append = on
+# 使计划者能够使用并行哈希计划
+# enable_parallel_hash = on
+# 启用计划时间和执行时间分区修剪
+# enable_partition_pruning = on
+# 启用分区连接
+# enable_partitionwise_join = off
+# 启用分区聚合和分组
+# enable_partitionwise_aggregate = off
+# 使计划者能够使用顺序扫描计划
+# enable_seqscan = on
+# 使计划者能够使用显式排序步骤
+# enable_sort = on
+# 使计划者能够使用 TID 扫描计划
+# enable_tidscan = on
+
+# - 计划成本常数 -
+# 设置规划器对顺序获取磁盘页面成本的估计
+# seq_page_cost = 1.0
+# 设置规划器对非顺序获取磁盘页面成本的估计
+random_page_cost = 4.0
+# 设置计划者对处理每个元组（行）的成本的估计
+# cpu_tuple_cost = 0.01
+# 设置规划器对索引扫描期间处理每个索引条目的成本的估计
+# cpu_index_tuple_cost = 0.005
+# 设置计划者对处理每个运算符或函数调用的成本的估计
+# cpu_operator_cost = 0.0025
+# 设置计划者对为并行查询启动工作进程的成本的估计
+# parallel_setup_cost = 1000.0
+# 设置计划者对将每个元组（行）从工作人员传递到领导者后端的成本的估计
+# parallel_tuple_cost = 0.1
+# 设置并行扫描的最小表数据量
+# min_parallel_table_scan_size = 8MB
+# 设置并行扫描的最小索引数据量
+# min_parallel_index_scan_size = 512kB
+# 设置规划器对数据缓存总大小的假设
+effective_cache_size = 6GB
+# 如果查询成本更高，则执行 JIT 编译
+# jit_above_cost = 100000
+# 如果查询成本更高，则执行 JIT 内联
+# jit_inline_above_cost = 500000
+# 如果查询成本更高，则优化 JIT 编译的函数
+# jit_optimize_above_cost = 500000
+
+# - 遗传查询优化器 -
+# 启用遗传查询优化
+# geqo = on
+# 设置使用 GEQO 的 FROM 项目的阈值
+# geqo_threshold = 12
+# GEQO：努力用于设置其他GEQO参数的默认值
+# geqo_effort = 5
+# GEQO：人口中的个体数量 
+# geqo_pool_size = 0
+# GEQO：算法的迭代次数
+# geqo_generations = 0
+# GEQO：种群内的选择压力
+# geqo_selection_bias = 2.0
+# GEQO：随机路径选择的种子
+# geqo_seed = 0.0
+  
+# - 其他计划选项 -
+# 设置默认统计目标  
+default_statistics_target = 100
+# 设置默认统计目标
+# constraint_exclusion = partition
+# 设置规划器对将检索的游标行的分数的估计
+# cursor_tuple_fraction = 0.1
+# 设置 FROM 列表大小，超过该大小子查询不会折叠
+# from_collapse_limit = 8
+# 允许 JIT 编译
+# jit = on
+# 设置 FROM 列表大小，超过该大小 JOIN 结构不会展平
+# join_collapse_limit = 8
+# 控制计划者对自定义或通用计划的选择
+# plan_cache_mode = auto
+# 设置规划器对递归查询工作表平均大小的估计
+# recursive_worktable_factor = 10.0
+
+#------------------------------------------------------------------------------
+# 报告和日志记录
+#------------------------------------------------------------------------------
+
+# - 在哪里登录 -
+
+# 设置服务器日志输出的目的地
+log_destination = 'csvlog'
+                
+#  当记录到stderr时使用
+# 启动子进程，将stderr输出和/或csvlog捕获到日志文件中
+logging_collector = on
+
+#  这些只在logging_collector打开时使用
+# log_directory = 'log'
+# 设置日志文件的文件名模式
+# log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'
+# 设置日志文件的权限
+# log_file_mode = 0600
+# 设置在强制旋转日志文件之前等待的时间
+# log_rotation_age = 1d
+# 设置日志文件在旋转之前可以达到的最大大小 
+# log_rotation_size = 10MB
+# 在日志轮换期间截断同名的现有日志文件
+log_truncate_on_rotation = on
+# 当日志记录到syslog时，这些都是相关的
+# 设置启用系统日志时要使用的系统日志"设施"
+# syslog_facility = 'LOCAL0'
+# 设置用于识别 syslog 中的 PostgreSQL 消息的程序名称
+# syslog_ident = 'postgres'
+# 将序列号添加到 syslog 消息中以避免重复抑制
+# syslog_sequence_numbers = on
+# 按行拆分发送到 syslog 的消息，以适应 1024 字节
+# syslog_split_messages = on
+  
+#  这只在日志记录到eventlog (Windows)时相关
+#  (改变需要重启开始)
+# 设置用于在事件日志中识别 PostgreSQL 消息的应用程序名称
+# event_source = 'PostgreSQL'
+  
+#  - 何时登录 -
+# 设置记录的消息级别
+# log_min_messages = warning
+# 导致记录所有在此级别或更高级别生成错误的语句
+# log_min_error_statement = error
+# 设置所有语句将被记录的最短执行时间
+# log_min_duration_statement = -1
+# 设置最短执行时间，超过该时间将记录语句示例。采样由 log_statement_sample_rate 决定 
+# log_min_duration_sample = -1
+# 要记录的超过 log_min_duration_sample 的语句部分
+# log_statement_sample_rate = 1.0
+# 设置记录所有语句的事务的比例 
+# log_transaction_sample_rate = 0.0
+# 长时间运行的启动操作的进度更新之间的时间
+# log_startup_progress_interval = 10s
+
+# - 记录什么 -
+# 记录每个查询的解析树
+# debug_print_parse = off
+# 记录每个查询的重写解析树
+# debug_print_rewritten = off
+# 记录每个查询的执行计划
+# debug_print_plan = off
+# 缩进解析和计划树显示
+# debug_pretty_print = on
+# 设置最短执行时间，超过该时间将记录 autovacuum 操作
+# log_autovacuum_min_duration = 10min
+# 记录每个检查点
+# log_checkpoints = on
+# 记录每个成功的连接
+# log_connections = off
+# 记录会话结束，包括持续时间
+# log_disconnections = off
+# 记录每个完成的 SQL 语句的持续时间
+# log_duration = off
+# 设置记录消息的详细程度
+# log_error_verbosity = default
+# 在连接日志中记录主机名 
+# log_hostname = off
+# 控制每个日志行的前缀信息
+log_line_prefix = '%m [%p] %q%u@%d/%a '
+# 记录长时间的锁等待
+# log_lock_waits = off
+# 记录备用恢复冲突等待                  
+# log_recovery_conflict_waits = off     
+# 设置记录语句时为绑定参数值记录的数据的最大长度（以字节为单位）                                       
+# log_parameter_max_length = -1         
+# 设置错误时记录语句时为绑定参数值记录的数据的最大长度（以字节为单位）                                    
+# log_parameter_max_length_on_error = 0 
+# 设置记录的语句类型                                        
+# log_statement = 'none'
+# 记录每个复制命令                
+# log_replication_commands = off
+# 记录大于此千字节数的临时文件的使用
+# log_temp_files = -1                   
+# 设置在日志消息中使用的时区                                                                             
+log_timezone = 'Asia/Shanghai'
+
+#------------------------------------------------------------------------------
+# 流程标题
+#------------------------------------------------------------------------------
+
+# 设置集群的名称
+# cluster_name = ''
+# 更新进程标题以显示活动的 SQL 命令
+update_process_title = off
+
+#------------------------------------------------------------------------------
+# 统计数据
+#------------------------------------------------------------------------------
+
+# - 累积查询和索引统计 -
+# 收集有关执行命令的信息
+track_activities = off
+# 设置为 pg_stat_activity.query 保留的大小
+# track_activity_query_size = 1024
+# 收集有关数据库活动的统计信息
+# track_counts = on
+# 收集数据库 I/O 活动的计时统计信息
+# track_io_timing = off
+# 收集 WAL I/O 活动的时间统计信息
+# track_wal_io_timing = off
+# 收集有关数据库活动的功能级统计信息
+# track_functions = none
+# 设置访问统计数据的一致性
+# stats_fetch_consistency = cache
+
+# - 监控 -
+
+# 启用查询标识符的核心计算
+# compute_query_id = auto
+# 将累积性能统计信息写入服务器日志
+# log_statement_stats = off
+# 将解析器性能统计信息写入服务器日志
+# log_parser_stats = off
+# 将规划器性能统计信息写入服务器日志
+# log_planner_stats = off
+# 将执行程序性能统计信息写入服务器日志
+# log_executor_stats = off
+
+#------------------------------------------------------------------------------
+# AUTOVACUUM
+#------------------------------------------------------------------------------
+# 启动 autovacuum 子进程
+autovacuum = on
+# 设置同时运行的 autovacuum 工作进程的最大数量                               
+autovacuum_max_workers = 4
+# autovacuum 运行之间的休眠时间
+autovacuum_naptime = 6s
+# autovacuum前元组更新或删除的最小数量
+# autovacuum_vacuum_threshold = 50
+# autovacuum前元组插入的最小数量
+# autovacuum_vacuum_insert_threshold = 1000
+# 分析前插入、更新或删除的最少元组数
+# autovacuum_analyze_threshold = 50
+# vacuum 之前元组更新或删除的数量，作为 reltuples 的一部分
+# autovacuum_vacuum_scale_factor = 0.2
+# vacuum 之前的元组插入数占 reltuples 的一部分
+# autovacuum_vacuum_insert_scale_factor = 0.2
+# 在分析之前插入、更新或删除的元组数，作为 reltuples 的一部分
+# autovacuum_analyze_scale_factor = 0.1
+# autovacuum 表以防止事务 ID 环绕的年龄
+# autovacuum_freeze_max_age = 200000000
+# autovacuum table 以防止 multixact wraparound 的 multixact 年龄
+# autovacuum_multixact_freeze_max_age = 400000000
+# autovacuum 的真空成本延迟
+# autovacuum_vacuum_cost_delay = 2ms
+# 限制前可用的真空成本量
+# autovacuum_vacuum_cost_limit = -1
+
+
+#------------------------------------------------------------------------------
+# 客户端连接默认值
+#------------------------------------------------------------------------------
+
+# - 声明的行为 -
+# 设置发送到客户端的消息级别
+# client_min_messages = notice
+# 为非模式限定的名称设置模式搜索顺序
+# search_path = '"$user", public'
+# 启用行安全
+# row_security = on
+# 设置新表的默认表访问方法
+# default_table_access_method = 'heap'
+# 设置默认表空间以在其中创建表和索引
+# default_tablespace = ''
+# 为可压缩值设置默认压缩方法
+# default_toast_compression = 'pglz'
+# 设置表空间以用于临时表和排序文件
+# temp_tablespaces = ''
+# 在 CREATE FUNCTION 和 CREATE PROCEDURE 期间检查例程体
+# check_function_bodies = on
+# 设置每个新事务的事务隔离级别
+# default_transaction_isolation = 'read committed'
+# 设置新交易的默认只读状态
+# default_transaction_read_only = off
+# 设置新交易的默认可延期状态
+# default_transaction_deferrable = off
+# 为触发器和重写规则设置会话行为
+# session_replication_role = 'origin'
+# 设置任何语句的最大允许持续时间
+# statement_timeout = 0
+# 设置任何等待锁的最大允许持续时间
+# lock_timeout = 0
+# 在事务中设置查询之间允许的最大空闲时间 
+# idle_in_transaction_session_timeout = 0
+# 当不在事务中时，设置查询之间允许的最大空闲时间
+# idle_session_timeout = 0
+# VACUUM 应该扫描整个表以冻结元组的年龄
+# vacuum_freeze_table_age = 150000000
+# VACUUM 应冻结表行的最小年龄
+# vacuum_freeze_min_age = 50000000
+# VACUUM 应该触发故障保护以避免环绕式中断的年龄
+# vacuum_failsafe_age = 1600000000
+# VACUUM 应该扫描整个表以冻结元组的多重事务年龄
+# vacuum_multixact_freeze_table_age = 150000000
+# VACUUM 应在表行中冻结 MultiXactId 的最小年龄
+# vacuum_multixact_freeze_min_age = 5000000
+# VACUUM 应触发故障保护以避免环绕式中断的多事务年龄
+# vacuum_multixact_failsafe_age = 1600000000
+# 设置 bytea 的输出格式
+# bytea_output = 'hex'
+# 设置二进制值在 XML 中的编码方式
+# xmlbinary = 'base64'
+# 设置隐式解析和序列化操作中的 XML 数据是否被视为文档或内容片段
+# xmloption = 'content'
+# 设置 GIN 索引的挂起列表的最大大小
+# gin_pending_list_limit = 4MB
+  
+# - 语言环境和格式 -
+# 设置日期和时间值的显示格式
+datestyle = 'iso, ymd'
+# 设置区间值的显示格式
+# intervalstyle = 'postgres'
+# 设置显示和解释时间戳的时区
+timezone = 'Asia/Shanghai'
+# 选择时区缩写文件
+# timezone_abbreviations = 'Default'
+# 设置浮点值显示的位数
+# extra_float_digits = 1
+# 设置客户端的字符集编码
+# client_encoding = sql_ascii
+
+# 这些设置由 initdb 初始化，但可以更改。
+# 设置消息显示的语言
+lc_messages = 'zh_CN.UTF-8'
+# 设置格式化货币金额的语言环境     
+lc_monetary = 'zh_CN.UTF-8'
+# 设置格式化数字的语言环境 
+lc_numeric = 'zh_CN.UTF-8'
+# 设置用于格式化日期和时间值的语言环境
+lc_time = 'zh_CN.UTF-8'
+
+# 文本搜索的默认配置
+# 设置默认文本搜索配置
+default_text_search_config = 'pg_catalog.simple'
+
+# - 共享库预加载 -
+# 列出非特权共享库以预加载到每个后端
+# local_preload_libraries = ''
+# 列出要预加载到每个后端的共享库
+# session_preload_libraries = ''
+# 列出要预加载到服务器的共享库
+# shared_preload_libraries = ''
+# 要使用的 JIT 供应商
+# jit_provider = 'llvmjit'
+
+# - 其他默认值 -
+# 设置动态可加载模块的路径
+# dynamic_library_path = '$libdir'
+# 加载扩展时添加路径和共享对象
+# extension_destdir = ''
+# 设置 GIN 精确搜索的最大允许结果
+# gin_fuzzy_search_limit = 0
+
+#------------------------------------------------------------------------------
+# 锁管理
+#------------------------------------------------------------------------------
+# 设置在检查死锁之前等待锁的时间
+# deadlock_timeout = 1s
+# 设置每个事务的最大锁数
+# max_locks_per_transaction = 64
+# 设置每个事务的最大谓词锁数
+# max_pred_locks_per_transaction = 64
+# 设置每个关系的谓词锁定页面和元组的最大数量
+# max_pred_locks_per_relation = -2
+# 设置每页谓词锁定元组的最大数量
+# max_pred_locks_per_page = 2
+
+#------------------------------------------------------------------------------
+# 版本和平台兼容性
+#------------------------------------------------------------------------------
+
+# - 以前的 PostgreSQL 版本 -
+# 允许输入数组中的 NULL 元素
+# array_nulls = on
+# 设置字符串文字中是否允许"\"
+# backslash_quote = safe_encoding
+# 警告普通字符串文字中的反斜杠转义
+# escape_string_warning = on
+# 启用向后兼容模式以对大对象进行权限检查
+# lo_compat_privileges = off
+# 生成 SQL 片段时，引用所有标识符
+# quote_all_identifiers = off
+# 导致 '...' 字符串从字面上处理反斜杠
+# standard_conforming_strings = on
+# 启用同步顺序扫描
+# synchronize_seqscans = on
+
+# - 其他平台和客户端 -
+# 将"expr=NULL"视为"expr IS NULL"
+# transform_null_equals = off
+
+
+#------------------------------------------------------------------------------
+# 错误处理
+#------------------------------------------------------------------------------
+# 出现任何错误终止会话
+# exit_on_error = off
+# 后端崩溃后重新初始化服务器
+# restart_after_crash = on
+# 同步数据文件失败后是否继续运行
+# data_sync_retry = off
+# 设置崩溃恢复前同步数据目录的方法
+# recovery_init_sync_method = fsync
+
+#------------------------------------------------------------------------------
+# 配置文件包括
+#------------------------------------------------------------------------------
+
+# 这些选项允许从文件以外的文件加载设置
+# 默认 postgresql.conf。 请注意，这些是指令，而不是变量
+# assignments，所以它们可以被多次分配。
+
+# include_dir = ''
+# include_if_exists = ''
+# include = ''
+
+
+#------------------------------------------------------------------------------
+# 定制选项
+#------------------------------------------------------------------------------
+
+# 在此处添加扩展设置
