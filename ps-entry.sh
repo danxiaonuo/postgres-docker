@@ -313,17 +313,18 @@ _main() {
 
 			docker_init_database_dir
 			
+			pg_setup_hba_conf
+
+			# PGPASSWORD is required for psql when authentication is required for 'local' connections via pg_hba.conf and is otherwise harmless
+			# e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
+			export PGPASSWORD="${PGPASSWORD:-$POSTGRES_PASSWORD}"
+			
 			export PG_MAJOR=15
 			
 			ln -sfd $PGDATA/postgresql.conf /etc/postgresql/$PG_MAJOR/main/postgresql.conf
                         ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/$PG_MAJOR/main/pg_hba.conf
                         ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/$PG_MAJOR/main/pg_ident.conf
 
-			pg_setup_hba_conf
-
-			# PGPASSWORD is required for psql when authentication is required for 'local' connections via pg_hba.conf and is otherwise harmless
-			# e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
-			export PGPASSWORD="${PGPASSWORD:-$POSTGRES_PASSWORD}"
 			docker_temp_server_start "$@"
 
 			docker_setup_db
