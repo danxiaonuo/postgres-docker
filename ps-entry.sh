@@ -295,7 +295,7 @@ _main() {
 		docker_setup_env
 		# setup data directories and permissions (when run as root)
 		if [[ -z "$PGDATA" ]]; then
-			export PGDATA=/data/db
+			export PGDATA=/data/postgres/data
 		fi
 		docker_create_db_directories
 		if [ "$(id -u)" = '0' ]; then
@@ -311,6 +311,11 @@ _main() {
 			ls /docker-entrypoint-initdb.d/ > /dev/null
 
 			docker_init_database_dir
+			
+			ln -sfd $PGDATA/postgresql.conf /etc/postgresql/$PG_MAJOR/main/postgresql.conf
+            ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/$PG_MAJOR/main/pg_hba.conf
+            ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/$PG_MAJOR/main/pg_ident.conf
+
 			pg_setup_hba_conf
 
 			# PGPASSWORD is required for psql when authentication is required for 'local' connections via pg_hba.conf and is otherwise harmless
