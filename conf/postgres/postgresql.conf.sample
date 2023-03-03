@@ -9,15 +9,15 @@
 # 这些变量的默认值由 -D 命令行驱动
 # 选项或 PGDATA 环境变量，此处表示为 ConfigDir。
 # 设置服务器的数据目录
-# data_directory = 'ConfigDir'
+data_directory = '/data/postgres/data'
 # 设置服务器的"hba"配置文件
-# hba_file = 'ConfigDir/pg_hba.conf'
+hba_file = '/data/postgres/data/pg_hba.conf'
 # 设置服务器的"ident"配置文件
-# ident_file = 'ConfigDir/pg_ident.conf'
+ident_file = '/data/postgres/data/pg_ident.conf'
 
 # 如果未明确设置 external_pid_file，则不会写入额外的 PID 文件。
 # 将 postmaster PID 写入指定文件
-# external_pid_file = ''
+external_pid_file = '/data/postgres/run/postgresql.pid'
 
 #------------------------------------------------------------------------------
 # 连接和认证
@@ -34,7 +34,7 @@ port = 5432
 # 设置为超级用户保留的连接槽数
 superuser_reserved_connections = 3 
 # 设置将创建 Unix 域套接字的目录
-unix_socket_directories = '/var/run/postgresql'
+unix_socket_directories = '/data/postgres/run'
 # 设置 Unix 域套接字的所属组
 # unix_socket_group = ''
 # 设置 Unix 域套接字的访问权限
@@ -468,22 +468,22 @@ log_destination = 'csvlog'
 logging_collector = on
 
 #  这些只在logging_collector打开时使用
-# log_directory = 'log'
+log_directory = '/data/postgres/logs'
 # 设置日志文件的文件名模式
-# log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'
+log_filename = 'postgresql-%Y-%m-%d_%H%M%S.log'
 # 设置日志文件的权限
-# log_file_mode = 0600
+log_file_mode = 0755
 # 设置在强制旋转日志文件之前等待的时间
-# log_rotation_age = 1d
+log_rotation_age = 1d
 # 设置日志文件在旋转之前可以达到的最大大小 
-# log_rotation_size = 10MB
+log_rotation_size = 10MB
 # 在日志轮换期间截断同名的现有日志文件
 log_truncate_on_rotation = on
 # 当日志记录到syslog时，这些都是相关的
 # 设置启用系统日志时要使用的系统日志"设施"
 # syslog_facility = 'LOCAL0'
 # 设置用于识别 syslog 中的 PostgreSQL 消息的程序名称
-# syslog_ident = 'postgres'
+syslog_ident = 'postgres'
 # 将序列号添加到 syslog 消息中以避免重复抑制
 # syslog_sequence_numbers = on
 # 按行拆分发送到 syslog 的消息，以适应 1024 字节
