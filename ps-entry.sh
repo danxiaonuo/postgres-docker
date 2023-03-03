@@ -37,7 +37,7 @@ docker_create_db_directories() {
 	local user; user="$(id -u)"
 
 	sudo mkdir -m u=rwx,g=rwx,o= -p $PGHOME/{data,logs,run} /var/run/postgresql /var/log/postgresql
-        sudo chown -R postgres:postgres $PGHOME/{data,logs,run} /var/run/postgresql /var/log/postgresql
+        sudo chown -R postgres:postgres /data $PGHOME /var/run/postgresql /var/log/postgresql
 	sudo chmod -R 700 $PGHOME/data
 
 	# ignore failure since it will be fine when using the image provided directory; see also https://github.com/docker-library/postgres/pull/289
@@ -312,6 +312,8 @@ _main() {
 			ls /docker-entrypoint-initdb.d/ > /dev/null
 
 			docker_init_database_dir
+			
+			export PG_MAJOR=15
 			
 			ln -sfd $PGDATA/postgresql.conf /etc/postgresql/$PG_MAJOR/main/postgresql.conf
                         ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/$PG_MAJOR/main/pg_hba.conf
