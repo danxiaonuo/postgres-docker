@@ -36,7 +36,6 @@ _is_sourced() {
 docker_create_db_directories() {
 	local user; user="$(id -u)"
 
-	# sudo mkdir -m u=rwx,g=rwx,o= -p $PGHOME/{data,logs,run} /var/run/postgresql /var/log/postgresql
 	sudo mkdir -m u=rwx,g=rwx,o= -p $PGHOME/data $PGHOME/logs $PGHOME/run /var/run/postgresql /var/log/postgresql
         sudo chown -R postgres:postgres /data $PGHOME /var/run/postgresql /var/log/postgresql
 	sudo chmod -R 700 $PGHOME/data
