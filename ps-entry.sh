@@ -37,7 +37,7 @@ docker_create_db_directories() {
 	local user; user="$(id -u)"
 
 	sudo mkdir -p "$PGDATA"
-        sudo chmod -R 700 "$PGDATA" && sudo chown -R postgres:postgres "$PGDATA"
+        sudo chmod -R 700 "$PGDATA" && sudo chown -R postgres:postgres "$PGHOME"
 
 	# ignore failure since it will be fine when using the image provided directory; see also https://github.com/docker-library/postgres/pull/289
 	mkdir -p /var/run/postgresql || :
