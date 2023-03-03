@@ -29,10 +29,11 @@ ENV PG_VERSION=$PG_VERSION
 ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
 
 # 工作目录
-ARG PGDATA=/data/db
-ENV PGDATA=$PGDATA
+ARG PGHOME=/data/postgres
+ENV PGHOME=$PGHOME
+
 # 数据目录
-ARG PGDATA=/data/db
+ARG PGDATA=/data/postgres/data
 ENV PGDATA=$PGDATA
 
 # 环境设置
@@ -154,7 +155,7 @@ COPY ["ps-entry.sh", "/docker-entrypoint.sh"]
 # ***** 下载postgres *****
 RUN set -eux && \
     # 设置postgres用户
-    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=${PGDATA} --shell=/bin/zsh postgres && \
+    groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 --home-dir=${PGHOME} --shell=/bin/zsh postgres && \
     # 下载postgres源
     wget --no-check-certificate https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb \
     -O ${DOWNLOAD_SRC}/percona-release_latest.$(lsb_release -sc)_all.deb && \
@@ -170,9 +171,10 @@ RUN set -eux && \
     mkdir -p /docker-entrypoint-initdb.d && \
     chown -R postgres:postgres /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
     chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
-    mkdir -p "$PGDATA" && chown -R postgres:postgres "$PGDATA" && chmod -R 777 "$PGDATA" && \
-    mkdir -p /var/run/postgresql && chown -R postgres:postgres /var/run/postgresql && chmod 2777 /var/run/postgresql && \
-    rm -rf /etc/postgresql /var/lib/postgresql  && \
+    rm -rf /etc/postgresql/15/main/*.conf /var/lib/postgresql /var/run/postgresql/ /var/log/postgresql && \
+    mkdir -m u=rwx,g=rwx,o= -p $PGHOME/{data,logs,run} /var/run/postgresql /var/log/postgresql
+    chown -R postgres:postgres $PGHOME/{data,logs,run} /var/run/postgresql /var/log/postgresql
+    chmod -R 755 /data/postgres /var/run/postgresql /var/log/postgresql
     sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf && \
     sed -i "/listen_addresses/c listen_addresses ='*'" /usr/share/postgresql/${PG_MAJOR}/postgresql.conf.sample && \
     rm -rf /var/lib/apt/lists/* && \
@@ -185,10 +187,10 @@ COPY ["conf/postgres/postgresql.conf.sample", "/usr/share/postgresql/${PG_MAJOR}
 STOPSIGNAL SIGQUIT
 
 # ***** 工作目录 *****
-WORKDIR ${PGDATA}
+WORKDIR ${PGHOME}
 
 # ***** 挂载目录 *****
-VOLUME ${PGDATA}
+VOLUME ${PGHOME}
 
 # ***** 入口 *****
 ENTRYPOINT ["/docker-entrypoint.sh"]
