@@ -172,9 +172,9 @@ RUN set -eux && \
     chown -R postgres:postgres /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
     chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
     rm -rf /etc/postgresql/15/main/*.conf /var/lib/postgresql /var/run/postgresql/ /var/log/postgresql && \
-    mkdir -m u=rwx,g=rwx,o= -p $PGHOME/{data,logs,run} /var/run/postgresql /var/log/postgresql
-    chown -R postgres:postgres $PGHOME/{data,logs,run} /var/run/postgresql /var/log/postgresql
-    chmod -R 755 /data/postgres /var/run/postgresql /var/log/postgresql
+    mkdir -m u=rwx,g=rwx,o= -p $PGHOME/{data,logs,run} /var/run/postgresql /var/log/postgresql && \
+    chown -R postgres:postgres $PGHOME/{data,logs,run} /var/run/postgresql /var/log/postgresql && \
+    chmod -R 755 /data/postgres /var/run/postgresql /var/log/postgresql && \
     sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf && \
     sed -i "/listen_addresses/c listen_addresses ='*'" /usr/share/postgresql/${PG_MAJOR}/postgresql.conf.sample && \
     rm -rf /var/lib/apt/lists/* && \
