@@ -88,7 +88,7 @@ docker_init_database_dir() {
 		set -- --waldir "$POSTGRES_INITDB_WALDIR" "$@"
 	fi
 
-	eval 'initdb --username="$POSTGRES_USER" --pwfile=<(echo "$POSTGRES_PASSWORD") '"$POSTGRES_INITDB_ARGS"' "$@"'
+	eval 'initdb --username="$POSTGRES_USER" --pwfile=<(echo "$POSTGRES_PASSWORD") -E UTF8 --auth-local peer --auth-host scram-sha-256 --no-instructions '"$POSTGRES_INITDB_ARGS"' "$@"'
 
 	# unset/cleanup "nss_wrapper" bits
 	if [[ "${LD_PRELOAD:-}" == */libnss_wrapper.so ]]; then
