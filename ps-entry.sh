@@ -313,8 +313,8 @@ _main() {
 			docker_init_database_dir
 			
 			ln -sfd $PGDATA/postgresql.conf /etc/postgresql/$PG_MAJOR/main/postgresql.conf
-            ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/$PG_MAJOR/main/pg_hba.conf
-            ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/$PG_MAJOR/main/pg_ident.conf
+                        ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/$PG_MAJOR/main/pg_hba.conf
+                        ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/$PG_MAJOR/main/pg_ident.conf
 
 			pg_setup_hba_conf
 
