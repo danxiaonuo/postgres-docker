@@ -798,7 +798,8 @@ default_text_search_config = 'pg_catalog.simple'
 #------------------------------------------------------------------------------
 
 # 在此处添加扩展设置
-# 在此处添加扩展设置
+
+# 从库设置
 # 对应主库的连接信息
 # host=<主节点IP> port=5432 user=replica password=replica 
 primary_conninfo = 'host=<主节点IP> port=5432 user=replica password=replica'
