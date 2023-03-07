@@ -350,11 +350,11 @@ _main() {
 	fi
 
 	exec "$@"
+	
+	pg_ctlcluster --skip-systemctl-redirect 15 main start
+        tail -f /dev/null
 }
 
 if ! _is_sourced; then
 	_main "$@"
 fi
-
-pg_ctlcluster --skip-systemctl-redirect 15 main start
-tail -f /dev/null
