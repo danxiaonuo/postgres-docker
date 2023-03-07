@@ -182,9 +182,6 @@ RUN set -eux && \
 
 # ***** 拷贝文件 *****
 COPY ["conf/postgres/postgresql.conf.sample", "/usr/share/postgresql/${PG_MAJOR}/postgresql.conf.sample"]
-COPY ["conf/postgres/postgresql.conf.sample", "/etc/postgresql/${PG_MAJOR}/main/postgresql.conf"]
-COPY ["conf/postgres/pg_hba.conf", "/etc/postgresql/${PG_MAJOR}/main/pg_hba.conf"]
-COPY ["conf/postgres/pg_ident.conf", "/etc/postgresql/${PG_MAJOR}/main/pg_ident.conf"]
 
 # ***** 容器信号处理 *****
 STOPSIGNAL SIGQUIT
