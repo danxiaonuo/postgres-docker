@@ -30,9 +30,9 @@ listen_addresses = '*'
 # 设置服务器监听的TCP端口
 port = 5432
 # 设置最大并发连接数
-# max_connections = 9999
+max_connections = 9999
 # 设置为超级用户保留的连接槽数
-superuser_reserved_connections = 3 
+superuser_reserved_connections = 1000 
 # 设置将创建 Unix 域套接字的目录
 unix_socket_directories = '/data/postgres/run'
 # 设置 Unix 域套接字的所属组
@@ -69,7 +69,7 @@ tcp_keepalives_count = 10
 # krb_server_keyfile = 'FILE:${sysconfdir}/krb5.keytab'
 # 设置是否应将 Kerberos 和 GSSAPI 用户名视为不区分大小写
 # krb_caseins_users = off
-  
+
 
 
 #------------------------------------------------------------------------------
@@ -80,7 +80,7 @@ tcp_keepalives_count = 10
 
 # 设置服务器使用的共享内存缓冲区的数量
 # 计算公式: (1G内存为256MB,250G内存为:256*250=64000MB)
-# shared_buffers = 1GB 
+shared_buffers = 1GB
 # 在 Linux 或 Windows 上使用大页面
 # huge_pages = on 
 # 应该请求的大页面的大小
@@ -161,13 +161,13 @@ effective_io_concurrency = 2
 # 代表许多客户端会话完成的维护工作
 # maintenance_io_concurrency = 10
 # 设置系统能够支持的后台进程的最大数量
-max_worker_processes = 8
+max_worker_processes = 6
 # 设置每个执行节点的最大并行进程数
 max_parallel_workers_per_gather = 4
 # 设置每个维护操作的最大并行进程数
 max_parallel_maintenance_workers = 4
 # 设置系统可以支持并行操作的最大工作线程数
-max_parallel_workers = 8
+max_parallel_workers = 6
 # 控制 Gather 和 Gather Merge 是否也运行子计划
 # parallel_leader_participation = on
 # 快照太旧而无法读取快照拍摄后更改的页面之前的时间
@@ -180,11 +180,11 @@ max_parallel_workers = 8
 # - 设置 -
 
 # 设置写入 WAL 的信息级别
-wal_level = logical
+wal_level = replica
 # 强制将更新同步到磁盘
 fsync = on
 # 设置当前事务的同步级别
-synchronous_commit = off
+synchronous_commit = on
 # 选择用于强制 WAL 更新到磁盘的方法
 # open_datasync（用open()选项O_DSYNC写 WAL 文件）
 # fdatasync（在每次提交时调用fdatasync()）
@@ -243,7 +243,7 @@ archive_mode = on
 # 设置将被调用以归档 WAL 文件的库
 # archive_library = ''
 # 设置将被调用以归档 WAL 文件的 shell 命令
-# archive_command = ''
+archive_command = 'cp %p ../archive/%f'
 # 设置在强制切换到下一个 WAL 文件之前等待的时间量
 # archive_timeout = 0 
 
@@ -251,7 +251,7 @@ archive_mode = on
 
 # 这些仅用于恢复模式
 # 设置将被调用以检索归档 WAL 文件的 shell 命令
-# restore_command = '' 
+# restore_command = 'cp %p ../archive/%f' 
 # 设置将在每个重启点执行的 shell 命令
 # archive_cleanup_command = ''
 # 设置恢复结束时执行一次的shell命令
@@ -288,7 +288,7 @@ archive_mode = on
 # 在将发送复制数据的主服务器和任何备用服务器上设置这些参数
 
 # 设置同时运行的 WAL 发送进程的最大数量
-# max_wal_senders = 10
+max_wal_senders = 60
 # 设置同时定义的复制槽的最大数量
 # max_replication_slots = 10
 # 设置为备用服务器保留的 WAL 文件的大小 
@@ -296,7 +296,7 @@ archive_mode = on
 # 设置复制槽可以保留的最大 WAL 大小
 # max_slot_wal_keep_size = -1
 # 设置等待 WAL 复制的最长时间
-# wal_sender_timeout = 60s
+wal_sender_timeout = 30s
 # 收集事务提交时间 
 # track_commit_timestamp = off
 
@@ -328,9 +328,9 @@ archive_mode = on
 # 如果没有配置永久插槽，则设置 WAL 接收器是否应创建临时复制插槽                               
 # wal_receiver_create_temp_slot = off
 # 设置 WAL 接收器状态报告到发送服务器之间的最大间隔                         
-# wal_receiver_status_interval = 10s
+# wal_receiver_status_interval = 1s
 # 允许从热备份到主数据库的反馈，以避免查询冲突                          
-# hot_standby_feedback = off
+# hot_standby_feedback = on
 # 设置从发送服务器接收数据的最长等待时间                                   
 # wal_receiver_timeout = 60s
 # 设置在尝试失败后重试检索 WAL 之前等待的时间                                   
@@ -435,7 +435,7 @@ effective_cache_size = 6GB
 # geqo_selection_bias = 2.0
 # GEQO：随机路径选择的种子
 # geqo_seed = 0.0
-  
+
 # - 其他计划选项 -
 # 设置默认统计目标  
 default_statistics_target = 100
@@ -462,7 +462,7 @@ default_statistics_target = 100
 
 # 设置服务器日志输出的目的地
 log_destination = 'csvlog'
-                
+
 #  当记录到stderr时使用
 # 启动子进程，将stderr输出和/或csvlog捕获到日志文件中
 logging_collector = on
@@ -488,12 +488,12 @@ syslog_ident = 'postgres'
 # syslog_sequence_numbers = on
 # 按行拆分发送到 syslog 的消息，以适应 1024 字节
 # syslog_split_messages = on
-  
+
 #  这只在日志记录到eventlog (Windows)时相关
 #  (改变需要重启开始)
 # 设置用于在事件日志中识别 PostgreSQL 消息的应用程序名称
 # event_source = 'PostgreSQL'
-  
+
 #  - 何时登录 -
 # 设置记录的消息级别
 # log_min_messages = warning
@@ -682,7 +682,7 @@ autovacuum_naptime = 6s
 # xmloption = 'content'
 # 设置 GIN 索引的挂起列表的最大大小
 # gin_pending_list_limit = 4MB
-  
+
 # - 语言环境和格式 -
 # 设置日期和时间值的显示格式
 datestyle = 'iso, ymd'
@@ -798,3 +798,9 @@ default_text_search_config = 'pg_catalog.simple'
 #------------------------------------------------------------------------------
 
 # 在此处添加扩展设置
+# 在此处添加扩展设置
+# 对应主库的连接信息
+# host=<主节点IP> port=5432 user=replica password=replica 
+primary_conninfo = 'host=<主节点IP> port=5432 user=replica password=replica'
+# 流复制同步到最新的数据
+# recovery_target_timeline = 'latest'
