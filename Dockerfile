@@ -172,7 +172,7 @@ RUN set -eux && \
     chown -R postgres:postgres /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
     chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
     rm -rf /etc/postgresql/${PG_MAJOR}/main/*.conf /var/lib/postgresql /var/run/postgresql/ /var/log/postgresql && \
-    mkdir -m u=rwx,g=rwx,o= -p $PGHOME/data $PGHOME/logs $PGHOME/run /var/run/postgresql /var/log/postgresql && \
+    mkdir -m u=rwx,g=rwx,o= -p $PGHOME/data $PGHOME/logs $PGHOME/run $PGHOME/archive /var/run/postgresql /var/log/postgresql && \
     chown -R postgres:postgres $PGHOME /var/run/postgresql /var/log/postgresql && \
     chmod -R 755 $PGHOME /var/run/postgresql /var/log/postgresql && \
     sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf && \
@@ -182,6 +182,9 @@ RUN set -eux && \
 
 # ***** 拷贝文件 *****
 COPY ["conf/postgres/postgresql.conf.sample", "/usr/share/postgresql/${PG_MAJOR}/postgresql.conf.sample"]
+COPY ["conf/postgres/postgresql.conf.sample", "/etc/postgresql/${PG_MAJOR}/main/postgresql.conf"]
+COPY ["conf/postgres/pg_hba.conf", "/etc/postgresql/${PG_MAJOR}/main/pg_hba.conf"]
+COPY ["conf/postgres/pg_ident.conf", "/etc/postgresql/${PG_MAJOR}/main/pg_ident.conf"]
 
 # ***** 容器信号处理 *****
 STOPSIGNAL SIGQUIT
