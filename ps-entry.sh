@@ -232,7 +232,7 @@ pg_setup_hba_conf() {
 			echo '# warning trust is enabled for all connections'
 			echo '# see https://www.postgresql.org/docs/15/auth-trust.html'
 		fi
-		echo "host all all all $POSTGRES_HOST_AUTH_METHOD"
+		echo "host    all             all             all                     $POSTGRES_HOST_AUTH_METHOD"
 	} >> "$PGDATA/pg_hba.conf"
 }
 
