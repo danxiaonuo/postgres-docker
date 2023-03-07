@@ -312,8 +312,6 @@ _main() {
 			ls /docker-entrypoint-initdb.d/ > /dev/null
 
 			docker_init_database_dir
-			
-			pg_setup_hba_conf
 
 			# PGPASSWORD is required for psql when authentication is required for 'local' connections via pg_hba.conf and is otherwise harmless
 			# e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
@@ -328,6 +326,8 @@ _main() {
                         sudo chmod -R 600 /etc/postgresql/15/main/*.conf
                         sudo chown -R postgres:postgres $PGHOME /etc/postgresql
                         sudo chmod -R 700 $PGDATA
+			
+			pg_setup_hba_conf
 
 			docker_temp_server_start "$@"
 
