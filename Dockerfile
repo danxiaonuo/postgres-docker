@@ -200,6 +200,3 @@ USER 999
 
 # ***** 入口 *****
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
-
-
