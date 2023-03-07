@@ -325,9 +325,9 @@ _main() {
                         ln -sfd /etc/postgresql/15/main/pg_hba.conf $PGDATA/pg_hba.conf
                         ln -sfd /etc/postgresql/15/main/pg_ident.conf $PGDATA/pg_ident.conf
                         ln -sfd /etc/postgresql/15/main/postgresql.conf $PGDATA/postgresql.conf
-                        chmod -R 600 /etc/postgresql/15/main/*.conf
-                        chown -R postgres:postgres $PGHOME /etc/postgresql
-                        chmod -R 700 $PGDATA
+                        sudo chmod -R 600 /etc/postgresql/15/main/*.conf
+                        sudo chown -R postgres:postgres $PGHOME /etc/postgresql
+                        sudo chmod -R 700 $PGDATA
 
 			docker_temp_server_start "$@"
 
