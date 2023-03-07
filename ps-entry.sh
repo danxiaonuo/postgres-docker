@@ -322,7 +322,7 @@ _main() {
 			export PG_MAJOR=15
 			
                         ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/15/main/pg_hba.conf 
-                        ln -sfd  $PGDATA/pg_ident.conf /etc/postgresql/15/main/pg_ident.conf 
+                        ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/15/main/pg_ident.conf 
                         ln -sfd $PGDATA/postgresql.conf /etc/postgresql/15/main/postgresql.conf 
 						
 			docker_temp_server_start "$@"
