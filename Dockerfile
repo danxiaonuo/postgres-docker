@@ -192,11 +192,14 @@ WORKDIR ${PGHOME}
 # ***** 挂载目录 *****
 VOLUME ${PGHOME}
 
+# ***** 入口 *****
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
 # ***** 监听端口 *****
 EXPOSE 5432
 
 # ***** 用户 *****
 USER 999
 
-# ***** 入口 *****
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# ***** 执行命令 *****
+CMD ["pg_ctlcluster", "--skip-systemctl-redirect", "15 main start && tail -f /dev/null"]
