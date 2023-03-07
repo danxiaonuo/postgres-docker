@@ -202,4 +202,4 @@ EXPOSE 5432
 USER 999
 
 # ***** 执行命令 *****
-CMD ["pg_ctlcluster", "--skip-systemctl-redirect", "15", "main", "start", "&& tail -f /dev/null"]
+CMD ["postgres"]
