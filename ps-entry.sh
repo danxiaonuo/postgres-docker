@@ -36,7 +36,7 @@ _is_sourced() {
 docker_create_db_directories() {
 	local user; user="$(id -u)"
 
-	sudo mkdir -m u=rwx,g=rwx,o= -p $PGHOME/data $PGHOME/logs $PGHOME/run /var/run/postgresql /var/log/postgresql
+	sudo mkdir -m u=rwx,g=rwx,o= -p $PGHOME/data $PGHOME/logs $PGHOME/run $PGHOME/archive /var/run/postgresql /var/log/postgresql
         sudo chown -R postgres:postgres /data $PGHOME /var/run/postgresql /var/log/postgresql
 	sudo chmod -R 700 $PGHOME/data
 
@@ -321,9 +321,13 @@ _main() {
 			
 			export PG_MAJOR=15
 			
-			ln -sfd $PGDATA/postgresql.conf /etc/postgresql/$PG_MAJOR/main/postgresql.conf
-                        ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/$PG_MAJOR/main/pg_hba.conf
-                        ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/$PG_MAJOR/main/pg_ident.conf
+			rm -rf $PGDATA/pg_hba.conf $PGDATA/pg_ident.conf $PGDATA/postgresql.conf
+                        ln -sfd /etc/postgresql/15/main/pg_hba.conf $PGDATA/pg_hba.conf
+                        ln -sfd /etc/postgresql/15/main/pg_ident.conf $PGDATA/pg_ident.conf
+                        ln -sfd /etc/postgresql/15/main/postgresql.conf $PGDATA/postgresql.conf
+                        chmod -R 600 /etc/postgresql/15/main/*.conf
+                        chown -R postgres:postgres $PGHOME /etc/postgresql
+                        chmod -R 700 $PGDATA
 
 			docker_temp_server_start "$@"
 
