@@ -193,9 +193,9 @@ synchronous_commit = on
 # open_sync（用open()选项O_SYNC写 WAL 文件）
 wal_sync_method = open_sync
 # 在检查点后首次修改时将整页写入 WAL
-full_page_writes = off
+full_page_writes = on
 # 在检查点后首次修改时将整页写入 WAL
-wal_log_hints = off
+wal_log_hints = on
 # 使用指定方法压缩写入 WAL 文件的整页写入
 wal_compression = off
 # 在首次使用前将零写入新的 WAL 文件
@@ -251,7 +251,7 @@ archive_command = 'cp %p ../archive/%f'
 
 # 这些仅用于恢复模式
 # 设置将被调用以检索归档 WAL 文件的 shell 命令
-# restore_command = 'cp %p ../archive/%f' 
+restore_command = 'cp %p ../archive/%f' 
 # 设置将在每个重启点执行的 shell 命令
 # archive_cleanup_command = ''
 # 设置恢复结束时执行一次的shell命令
@@ -290,13 +290,13 @@ archive_command = 'cp %p ../archive/%f'
 # 设置同时运行的 WAL 发送进程的最大数量
 max_wal_senders = 60
 # 设置同时定义的复制槽的最大数量
-# max_replication_slots = 10
+max_replication_slots = 6000
 # 设置为备用服务器保留的 WAL 文件的大小 
 # wal_keep_size = 0
 # 设置复制槽可以保留的最大 WAL 大小
 # max_slot_wal_keep_size = -1
 # 设置等待 WAL 复制的最长时间
-wal_sender_timeout = 30s
+wal_sender_timeout = 120s
 # 收集事务提交时间 
 # track_commit_timestamp = off
 
@@ -306,7 +306,7 @@ wal_sender_timeout = 30s
 # 在备用服务器上忽略这些设置
 
 # 同步备用数据库的数量和潜在同步备用数据库的名称列表
-# synchronous_standby_names = ''
+synchronous_standby_names = 'ANY 1 (*)'
 # 应延迟 VACUUM 和 HOT 清理的事务数
 # vacuum_defer_cleanup_age = 0
 
@@ -314,23 +314,24 @@ wal_sender_timeout = 30s
 
 # 在主服务器上忽略这些设置
 # 设置用于连接到发送服务器的连接字符串
-# primary_conninfo = ''
+# host=<主节点IP> port=5432 user=replica password=replica 
+# primary_conninfo = 'host=<主节点IP> port=5432 user=replica password=replica'
 # 设置要在发送服务器上使用的复制槽的名称               
-# primary_slot_name = '' 
+# primary_slot_name = 'node_slot' 
 # 指定一个触发器文件，该文件的存在会结束后备机中的恢复             
 # promote_trigger_file = ''
 # 在恢复期间允许连接和查询           
-# hot_standby = on
+hot_standby = on
 # 设置当热备用服务器正在处理归档 WAL 数据时取消查询前的最大延迟                                                       
 # max_standby_archive_delay = 30s
 # 设置当热备服务器正在处理流式 WAL 数据时取消查询前的最大延迟                                  
-# max_standby_streaming_delay = 30s
+max_standby_streaming_delay = 30s
 # 如果没有配置永久插槽，则设置 WAL 接收器是否应创建临时复制插槽                               
 # wal_receiver_create_temp_slot = off
 # 设置 WAL 接收器状态报告到发送服务器之间的最大间隔                         
-# wal_receiver_status_interval = 1s
+wal_receiver_status_interval = 1s
 # 允许从热备份到主数据库的反馈，以避免查询冲突                          
-# hot_standby_feedback = on
+hot_standby_feedback = on
 # 设置从发送服务器接收数据的最长等待时间                                   
 # wal_receiver_timeout = 60s
 # 设置在尝试失败后重试检索 WAL 之前等待的时间                                   
@@ -798,10 +799,3 @@ default_text_search_config = 'pg_catalog.simple'
 #------------------------------------------------------------------------------
 
 # 在此处添加扩展设置
-
-# 从库设置
-# 对应主库的连接信息
-# host=<主节点IP> port=5432 user=replica password=replica 
-primary_conninfo = 'host=<主节点IP> port=5432 user=replica password=replica'
-# 流复制同步到最新的数据
-# recovery_target_timeline = 'latest'
