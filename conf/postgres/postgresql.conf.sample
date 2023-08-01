@@ -34,7 +34,7 @@ max_connections = 9999
 # 设置为超级用户保留的连接槽数
 superuser_reserved_connections = 1000 
 # 设置将创建 Unix 域套接字的目录
-unix_socket_directories = '/data/postgres/run'
+unix_socket_directories = '/var/run/postgresql'
 # 设置 Unix 域套接字的所属组
 # unix_socket_group = ''
 # 设置 Unix 域套接字的访问权限
