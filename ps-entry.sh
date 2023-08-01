@@ -333,11 +333,11 @@ _main() {
                         ln -sfd $PGDATA/postgresql.conf /etc/postgresql/15/main/postgresql.conf 
 						
 			docker_temp_server_start "$@"
+
+			docker_setup_db
    
 			docker_process_init_files /docker-entrypoint-initdb.d/*
    
-                        docker_setup_db
-			
 			pg_setup_pg_stat_monitor
 
 			docker_temp_server_stop
