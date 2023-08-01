@@ -306,7 +306,7 @@ wal_sender_timeout = 120s
 # 在备用服务器上忽略这些设置
 
 # 同步备用数据库的数量和潜在同步备用数据库的名称列表
-synchronous_standby_names = 'ANY 1 (*)'
+# synchronous_standby_names = 'ANY 1 (*)'
 # 应延迟 VACUUM 和 HOT 清理的事务数
 # vacuum_defer_cleanup_age = 0
 
