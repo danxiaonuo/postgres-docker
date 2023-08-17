@@ -88,7 +88,8 @@ docker_init_database_dir() {
 		set -- --waldir "$POSTGRES_INITDB_WALDIR" "$@"
 	fi
 
-	eval 'initdb --username="$POSTGRES_USER" --pwfile=<(echo "$POSTGRES_PASSWORD") -E UTF8 --auth-local peer --auth-host scram-sha-256 --no-instructions '"$POSTGRES_INITDB_ARGS"' "$@"'
+	# --pwfile refuses to handle a properly-empty file (hence the "\n"): https://github.com/docker-library/postgres/issues/1025
+	eval 'initdb --username="$POSTGRES_USER" --pwfile=<(printf "%s\n" "$POSTGRES_PASSWORD") '"$POSTGRES_INITDB_ARGS"' "$@"'
 
 	# unset/cleanup "nss_wrapper" bits
 	if [[ "${LD_PRELOAD:-}" == */libnss_wrapper.so ]]; then
