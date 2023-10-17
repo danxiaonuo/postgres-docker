@@ -239,7 +239,7 @@ min_wal_size = 2GB
 
 # - 存档 -
 # 允许使用 archive_command 归档 WAL 文件
-archive_mode = on
+archive_mode = off
 # 设置将被调用以归档 WAL 文件的库
 # archive_library = ''
 # 设置将被调用以归档 WAL 文件的 shell 命令
