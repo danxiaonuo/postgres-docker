@@ -330,7 +330,7 @@ _main() {
                         ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/$PG_MAJOR/main/pg_hba.conf 
                         ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/$PG_MAJOR/main/pg_ident.conf 
                         ln -sfd $PGDATA/postgresql.conf /etc/postgresql/$PG_MAJOR/main/postgresql.conf
-			timescaledb-tune --quiet --yes --dry-run >> /etc/postgresql/$PG_MAJOR/main/postgresql.conf
+                        timescaledb-tune --quiet --yes --dry-run --pg-config=/usr/share/postgresql/${PG_MAJOR}/postgresql.conf.sample >> /etc/postgresql/$PG_MAJOR/main/postgresql.conf
 						
 			docker_temp_server_start "$@"
 
