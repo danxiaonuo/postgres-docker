@@ -22,10 +22,8 @@ ARG DOCKER_IMAGE_TAG=22.04
 ENV DOCKER_IMAGE_TAG=$DOCKER_IMAGE_TAG
 
 # PG版本号
-ARG PG_MAJOR=15
+ARG PG_MAJOR=16
 ENV MYSQL_MAJOR=$PG_MAJOR
-ARG PG_VERSION=${PG_MAJOR}_15.1-1
-ENV PG_VERSION=$PG_VERSION
 ENV PATH $PATH:/usr/lib/postgresql/$PG_MAJOR/bin
 
 # 工作目录
@@ -94,7 +92,8 @@ ARG PPG_DEPS="\
     percona-pgbackrest \
     percona-pgbouncer \
     percona-pgaudit${PG_MAJOR}-set-user \
-    percona-pgbadger"
+    percona-pgbadger \
+    timescaledb-postgresql-${PG_MAJOR} \"
 ENV PPG_DEPS=$PPG_DEPS
 
 # ***** 安装依赖 *****
@@ -102,6 +101,7 @@ RUN set -eux && \
    # 更新源地址
    sed -i s@http://*.*ubuntu.com@https://mirrors.aliyun.com@g /etc/apt/sources.list && \
    sed -i 's?# deb-src?deb-src?g' /etc/apt/sources.list && \
+   add-apt-repository -y ppa:timescale/timescaledb-ppa \
    # 解决证书认证失败问题
    touch /etc/apt/apt.conf.d/99verify-peer.conf && echo >>/etc/apt/apt.conf.d/99verify-peer.conf "Acquire { https::Verify-Peer false }" && \
    # 更新系统软件
