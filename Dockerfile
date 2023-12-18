@@ -82,7 +82,8 @@ ARG PKG_DEPS="\
     libdbd-pg-perl \
     libdbi-perl \
     perl-modules \
-    ca-certificates"
+    ca-certificates \
+    software-properties-common"
 ENV PKG_DEPS=$PKG_DEPS
 
 
