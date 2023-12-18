@@ -108,7 +108,7 @@ RUN set -eux && \
    DEBIAN_FRONTEND=noninteractive apt-get update -qqy && apt-get upgrade -qqy && \
    # 安装依赖包
    DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends $PKG_DEPS && \
-   DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:timescale/timescaledb-ppa \
+   DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:timescale/timescaledb-ppa && \
    DEBIAN_FRONTEND=noninteractive apt-get -qqy --no-install-recommends autoremove --purge && \
    DEBIAN_FRONTEND=noninteractive apt-get -qqy --no-install-recommends autoclean && \
    rm -rf /var/lib/apt/lists/* && \
