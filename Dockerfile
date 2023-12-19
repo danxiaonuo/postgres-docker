@@ -173,7 +173,8 @@ RUN set -eux && \
     mkdir -p /docker-entrypoint-initdb.d && \
     chown -R postgres:postgres /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
     chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
-    rm -rf /etc/postgresql/${PG_MAJOR}/main/*.conf /var/lib/postgresql /var/run/postgresql/ /var/log/postgresql && \
+    rm -rf /etc/postgresql/${PG_MAJOR}/main/*.conf && \
+    # rm -rf /etc/postgresql/${PG_MAJOR}/main/*.conf /var/lib/postgresql /var/run/postgresql/ /var/log/postgresql && \
     mkdir -m u=rwx,g=rwx,o= -p $PGHOME/data $PGHOME/logs $PGHOME/run $PGHOME/archive /var/run/postgresql /var/log/postgresql && \
     chown -R postgres:postgres $PGHOME /var/run/postgresql /var/log/postgresql && \
     chmod -R 755 $PGHOME /var/run/postgresql /var/log/postgresql && \
