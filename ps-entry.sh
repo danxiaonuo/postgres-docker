@@ -326,11 +326,13 @@ _main() {
 			# PGPASSWORD is required for psql when authentication is required for 'local' connections via pg_hba.conf and is otherwise harmless
 			# e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
 			export PGPASSWORD="${PGPASSWORD:-$POSTGRES_PASSWORD}"
-						
-                        ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/$PG_MAJOR/main/pg_hba.conf 
-                        ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/$PG_MAJOR/main/pg_ident.conf 
-                        ln -sfd $PGDATA/postgresql.conf /etc/postgresql/$PG_MAJOR/main/postgresql.conf
-                        timescaledb-tune --quiet --yes --dry-run --pg-config=/usr/share/postgresql/${PG_MAJOR}/postgresql.conf.sample >> /etc/postgresql/$PG_MAJOR/main/postgresql.conf
+
+                        export PG_MAJOR=16
+			
+                        ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/${PG_MAJOR}/main/pg_hba.conf 
+                        ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/${PG_MAJOR}/main/pg_ident.conf 
+                        ln -sfd $PGDATA/postgresql.conf /etc/postgresql/${PG_MAJOR}/main/postgresql.conf
+                        timescaledb-tune --quiet --yes --dry-run --pg-config=/usr/share/postgresql/${PG_MAJOR}/postgresql.conf.sample >> /etc/postgresql/${PG_MAJOR}/main/postgresql.conf
 						
 			docker_temp_server_start "$@"
 
