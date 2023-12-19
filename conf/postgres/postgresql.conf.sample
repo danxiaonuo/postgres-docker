@@ -28,13 +28,13 @@ external_pid_file = '/data/postgres/run/postgresql.pid'
 # 设置要监听的主机名或 IP 地址
 listen_addresses = '*'
 # 设置服务器监听的TCP端口
-port = 5432
+# port = 5432
 # 设置最大并发连接数
 max_connections = 9999
 # 设置为超级用户保留的连接槽数
-superuser_reserved_connections = 1000 
+# superuser_reserved_connections = 999
 # 设置将创建 Unix 域套接字的目录
-unix_socket_directories = '/var/run/postgresql'
+# unix_socket_directories = '/var/run/postgresql'
 # 设置 Unix 域套接字的所属组
 # unix_socket_group = ''
 # 设置 Unix 域套接字的访问权限
