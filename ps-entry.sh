@@ -237,7 +237,7 @@ pg_setup_hba_conf() {
 		echo
 		if [ 'trust' = "$POSTGRES_HOST_AUTH_METHOD" ]; then
 			echo '# warning trust is enabled for all connections'
-			echo '# see https://www.postgresql.org/docs/16/auth-trust.html'
+			echo '# see https://www.postgresql.org/docs/15/auth-trust.html'
 		fi
 		echo "host    all             all             all                     $POSTGRES_HOST_AUTH_METHOD"
 	} >> "$PGDATA/pg_hba.conf"
@@ -326,7 +326,7 @@ _main() {
 			# e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
 			export PGPASSWORD="${PGPASSWORD:-$POSTGRES_PASSWORD}"
 
-                        export PG_MAJOR=16
+                        export PG_MAJOR=15
 			
                         ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/${PG_MAJOR}/main/pg_hba.conf 
                         ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/${PG_MAJOR}/main/pg_ident.conf 
