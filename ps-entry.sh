@@ -255,10 +255,9 @@ docker_temp_server_start() {
 	set -- "$@" -c listen_addresses='' -p "${PGPORT:-5432}"
 
 	PGUSER="${PGUSER:-$POSTGRES_USER}" \
-	pg_ctlcluster --skip-systemctl-redirect 16 main start
-	#pg_ctl -D "$PGDATA" \
-	#       -o "$(printf '%q ' "$@")" \
-	#       -w start
+	pg_ctl -D "$PGDATA" \
+	       -o "$(printf '%q ' "$@")" \
+	       -w start
 }
 
 # stop postgresql server after done setting up user and running scripts
