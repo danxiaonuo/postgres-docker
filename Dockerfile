@@ -92,9 +92,12 @@ ARG PPG_DEPS="\
     percona-pgbackrest \
     percona-pgbouncer \
     percona-pgaudit${PG_MAJOR}-set-user \
-    percona-pgbadger \
-    timescaledb-2-postgresql-${PG_MAJOR}"
+    percona-pgbadger"
 ENV PPG_DEPS=$PPG_DEPS
+
+# PTS依赖包
+ARG PTS_DEPS="timescaledb-2-postgresql-${PG_MAJOR}"
+ENV PTS_DEPS=$PTS_DEPS
 
 # ***** 安装依赖 *****
 RUN set -eux && \
@@ -161,11 +164,16 @@ RUN set -eux && \
     # 安装timescale源
     echo "deb https://packagecloud.io/timescale/timescaledb/ubuntu/ $(lsb_release -c -s) main" | sudo tee /etc/apt/sources.list.d/timescaledb.list && \
     wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/timescaledb.gpg && \
+    # 更新源
+    DEBIAN_FRONTEND=noninteractive apt -y update && \
     # 安装percona-postgres
     dpkg -i ${DOWNLOAD_SRC}/*.deb && \
     percona-release setup ppg-${PG_MAJOR} && \
     # 安装依赖包
     DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends $PPG_DEPS && \
+    mv /var/lib/dpkg/info/percona-postgresql-16.postinst /var/lib/dpkg/info/percona-postgresql-16.postinst.bak && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends $PTS_DEPS && \
+    mv /var/lib/dpkg/info/percona-postgresql-16.postinst.bak /var/lib/dpkg/info/percona-postgresql-16.postinst && \
     # 删除临时文件
     rm -rf /var/lib/apt/lists/* ${DOWNLOAD_SRC}/*.deb && \
     # 安装postgresqltuner
@@ -173,8 +181,7 @@ RUN set -eux && \
     mkdir -p /docker-entrypoint-initdb.d && \
     chown -R postgres:postgres /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
     chmod -R 775 /docker-entrypoint-initdb.d /docker-entrypoint.sh /root /bin/postgresqltuner.pl && \
-    rm -rf /etc/postgresql/${PG_MAJOR}/main/*.conf && \
-    # rm -rf /etc/postgresql/${PG_MAJOR}/main/*.conf /var/lib/postgresql /var/run/postgresql/ /var/log/postgresql && \
+    rm -rf /etc/postgresql/${PG_MAJOR}/main/*.conf /var/lib/postgresql /var/run/postgresql/ /var/log/postgresql && \
     mkdir -m u=rwx,g=rwx,o= -p $PGHOME/data $PGHOME/logs $PGHOME/run $PGHOME/archive /var/run/postgresql /var/log/postgresql && \
     chown -R postgres:postgres $PGHOME /var/run/postgresql /var/log/postgresql && \
     chmod -R 755 $PGHOME /var/run/postgresql /var/log/postgresql && \
