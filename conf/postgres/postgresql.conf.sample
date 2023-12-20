@@ -80,7 +80,7 @@ tcp_keepalives_count = 10
 
 # 设置服务器使用的共享内存缓冲区的数量
 # 计算公式: (1G内存为256MB,250G内存为:256*250=64000MB)
-shared_buffers = 1GB
+# shared_buffers = 1GB
 # 在 Linux 或 Windows 上使用大页面
 # huge_pages = on 
 # 应该请求的大页面的大小
@@ -92,12 +92,12 @@ shared_buffers = 1GB
 # max_prepared_transactions = 0
 # 设置用于查询工作区的最大内存
 # 减少外部文件排序
-work_mem = 64kB
+# work_mem = 64kB
 # 用于哈希表的 work_mem 的倍数
 # hash_mem_multiplier = 2.0
 # 设置用于维护操作的最大内存
 # 加速建立索引
-maintenance_work_mem = 512MB
+# maintenance_work_mem = 512MB
 # 设置每个 autovacuum 工作进程使用的最大内存
 # 加速垃圾回收
 autovacuum_work_mem = 512MB
@@ -156,18 +156,18 @@ bgwriter_lru_multiplier = 10.0
 # 先前执行的写入被刷新到磁盘之前的页数
 # backend_flush_after = 0
 # 磁盘子系统可以有效处理的并发请求数
-effective_io_concurrency = 2
+# effective_io_concurrency = 2
 # 用于维护工作的 effective_io_concurrency 的变体
 # 代表许多客户端会话完成的维护工作
 # maintenance_io_concurrency = 10
 # 设置系统能够支持的后台进程的最大数量
-max_worker_processes = 6
+# max_worker_processes = 6
 # 设置每个执行节点的最大并行进程数
 max_parallel_workers_per_gather = 4
 # 设置每个维护操作的最大并行进程数
 max_parallel_maintenance_workers = 4
 # 设置系统可以支持并行操作的最大工作线程数
-max_parallel_workers = 6
+# max_parallel_workers = 6
 # 控制 Gather 和 Gather Merge 是否也运行子计划
 # parallel_leader_participation = on
 # 快照太旧而无法读取快照拍摄后更改的页面之前的时间
@@ -203,7 +203,7 @@ wal_compression = off
 # 通过重命名回收 WAL 文件
 # wal_recycle = on
 # 为 WAL 设置共享内存中的磁盘页面缓冲区数
-wal_buffers = 1GB
+# wal_buffers = 1GB
 # 在 WAL 编写器中执行的 WAL 刷新之间的时间
 wal_writer_delay = 10ms
 # 触发刷新的 WAL 编写器写出的 WAL 数量
@@ -227,7 +227,7 @@ checkpoint_completion_target = 0.9
 # 设置触发检查点的 WAL 大小
 max_wal_size = 8GB
 # 设置将 WAL 缩小到的最小大小
-min_wal_size = 2GB
+# min_wal_size = 2GB
 
 # - 恢复期间预取 -
 
@@ -397,7 +397,7 @@ hot_standby_feedback = on
 # 设置规划器对顺序获取磁盘页面成本的估计
 # seq_page_cost = 1.0
 # 设置规划器对非顺序获取磁盘页面成本的估计
-random_page_cost = 4.0
+# random_page_cost = 4.0
 # 设置计划者对处理每个元组（行）的成本的估计
 # cpu_tuple_cost = 0.01
 # 设置规划器对索引扫描期间处理每个索引条目的成本的估计
@@ -413,7 +413,7 @@ random_page_cost = 4.0
 # 设置并行扫描的最小索引数据量
 # min_parallel_index_scan_size = 512kB
 # 设置规划器对数据缓存总大小的假设
-effective_cache_size = 6GB
+# effective_cache_size = 6GB
 # 如果查询成本更高，则执行 JIT 编译
 # jit_above_cost = 100000
 # 如果查询成本更高，则执行 JIT 内联
@@ -601,9 +601,9 @@ track_activities = off
 # 启动 autovacuum 子进程
 autovacuum = on
 # 设置同时运行的 autovacuum 工作进程的最大数量                               
-autovacuum_max_workers = 4
+# autovacuum_max_workers = 4
 # autovacuum 运行之间的休眠时间
-autovacuum_naptime = 6s
+# autovacuum_naptime = 6s
 # autovacuum前元组更新或删除的最小数量
 # autovacuum_vacuum_threshold = 50
 # autovacuum前元组插入的最小数量
