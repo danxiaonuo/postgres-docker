@@ -93,7 +93,7 @@ ARG PPG_DEPS="\
     percona-pgbouncer \
     percona-pgaudit${PG_MAJOR}-set-user \
     percona-pgbadger \
-    timescaledb-2-postgresql-${PG_MAJOR}='2.13.0'"
+    timescaledb-2-postgresql-${PG_MAJOR}"
 ENV PPG_DEPS=$PPG_DEPS
 
 # ***** 安装依赖 *****
