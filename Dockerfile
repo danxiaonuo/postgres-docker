@@ -82,7 +82,6 @@ ARG PKG_DEPS="\
     libdbd-pg-perl \
     libdbi-perl \
     perl-modules \
-    software-properties-common \
     ca-certificates"
 ENV PKG_DEPS=$PKG_DEPS
 
@@ -160,9 +159,8 @@ RUN set -eux && \
     wget --no-check-certificate https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb \
     -O ${DOWNLOAD_SRC}/percona-release_latest.$(lsb_release -sc)_all.deb && \
     # 安装timescale源
-    DEBIAN_FRONTEND=noninteractive add-apt-repository -y ppa:timescale/timescaledb-ppa && \
-    # echo "deb https://packagecloud.io/timescale/timescaledb/ubuntu/ $(lsb_release -c -s) main" | sudo tee /etc/apt/sources.list.d/timescaledb.list && \
-    # wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/timescaledb.gpg && \
+    echo "deb https://packagecloud.io/timescale/timescaledb/ubuntu/ $(lsb_release -c -s) main" | sudo tee /etc/apt/sources.list.d/timescaledb.list && \
+    wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/timescaledb.gpg && \
     # 更新源
     DEBIAN_FRONTEND=noninteractive apt -y update && \
     # 安装percona-postgres
