@@ -237,7 +237,7 @@ pg_setup_hba_conf() {
 		echo
 		if [ 'trust' = "$POSTGRES_HOST_AUTH_METHOD" ]; then
 			echo '# warning trust is enabled for all connections'
-			echo '# see https://www.postgresql.org/docs/15/auth-trust.html'
+			echo '# see https://www.postgresql.org/docs/16/auth-trust.html'
 		fi
 		echo "host    all             all             all                     $POSTGRES_HOST_AUTH_METHOD"
 	} >> "$PGDATA/pg_hba.conf"
@@ -255,7 +255,7 @@ docker_temp_server_start() {
 	set -- "$@" -c listen_addresses='' -p "${PGPORT:-5432}"
 
 	PGUSER="${PGUSER:-$POSTGRES_USER}" \
-	pg_ctlcluster --skip-systemctl-redirect 15 main start
+	pg_ctlcluster --skip-systemctl-redirect 16 main start
 	#pg_ctl -D "$PGDATA" \
 	#       -o "$(printf '%q ' "$@")" \
 	#       -w start
