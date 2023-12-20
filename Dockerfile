@@ -92,12 +92,9 @@ ARG PPG_DEPS="\
     percona-pgbackrest \
     percona-pgbouncer \
     percona-pgaudit${PG_MAJOR}-set-user \
-    percona-pgbadger"
+    percona-pgbadger \
+    timescaledb-2-postgresql-${PG_MAJOR}"
 ENV PPG_DEPS=$PPG_DEPS
-
-# PTS依赖包
-ARG PTS_DEPS="timescaledb-2-postgresql-${PG_MAJOR}"
-ENV PTS_DEPS=$PTS_DEPS
 
 # ***** 安装依赖 *****
 RUN set -eux && \
@@ -171,9 +168,6 @@ RUN set -eux && \
     percona-release setup ppg-${PG_MAJOR} && \
     # 安装依赖包
     DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends $PPG_DEPS && \
-    mv /var/lib/dpkg/info/percona-postgresql-16.postinst /var/lib/dpkg/info/percona-postgresql-16.postinst.bak && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -qqy --no-install-recommends $PTS_DEPS && \
-    mv /var/lib/dpkg/info/percona-postgresql-16.postinst.bak /var/lib/dpkg/info/percona-postgresql-16.postinst && \
     # 删除临时文件
     rm -rf /var/lib/apt/lists/* ${DOWNLOAD_SRC}/*.deb && \
     # 安装postgresqltuner
