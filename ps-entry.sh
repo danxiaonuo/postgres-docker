@@ -269,7 +269,7 @@ docker_temp_server_stop() {
 
 pg_setup_pg_stat_monitor() {
 	docker_process_sql --dbname postgres <<-'EOSQL'
-		alter system set shared_preload_libraries=pg_stat_monitor ;
+		alter system set shared_preload_libraries=timescaledb,pg_stat_monitor ;
 	EOSQL
 }
 
@@ -326,7 +326,7 @@ _main() {
 			# e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
 			export PGPASSWORD="${PGPASSWORD:-$POSTGRES_PASSWORD}"
 
-                        export PG_MAJOR=15
+                        export PG_MAJOR=16
 			
                         ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/${PG_MAJOR}/main/pg_hba.conf 
                         ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/${PG_MAJOR}/main/pg_ident.conf 
