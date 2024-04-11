@@ -30,7 +30,7 @@ listen_addresses = '*'
 # 设置服务器监听的TCP端口
 # port = 5432
 # 设置最大并发连接数
-max_connections = 9999
+# max_connections = 9999
 # 设置为超级用户保留的连接槽数
 # superuser_reserved_connections = 999
 # 设置将创建 Unix 域套接字的目录
@@ -163,9 +163,9 @@ bgwriter_lru_multiplier = 10.0
 # 设置系统能够支持的后台进程的最大数量
 # max_worker_processes = 6
 # 设置每个执行节点的最大并行进程数
-max_parallel_workers_per_gather = 4
+# max_parallel_workers_per_gather = 4
 # 设置每个维护操作的最大并行进程数
-max_parallel_maintenance_workers = 4
+# max_parallel_maintenance_workers = 4
 # 设置系统可以支持并行操作的最大工作线程数
 # max_parallel_workers = 6
 # 控制 Gather 和 Gather Merge 是否也运行子计划
@@ -219,13 +219,13 @@ commit_siblings = 9
 # 设置自动 WAL 检查点之间的最长时间
 checkpoint_timeout = 55min
 # 在检查点期间刷新脏缓冲区所花费的时间，作为检查点间隔的一部分
-checkpoint_completion_target = 0.9
+# checkpoint_completion_target = 0.9
 # 先前执行的写入被刷新到磁盘之前的页数
 # checkpoint_flush_after = 256kB
 # 如果 WAL 卷触发的检查点发生得太频繁，则设置警告前的最长时间
 # checkpoint_warning = 30s
 # 设置触发检查点的 WAL 大小
-max_wal_size = 8GB
+# max_wal_size = 8GB
 # 设置将 WAL 缩小到的最小大小
 # min_wal_size = 2GB
 
@@ -239,7 +239,7 @@ max_wal_size = 8GB
 
 # - 存档 -
 # 允许使用 archive_command 归档 WAL 文件
-archive_mode = off
+archive_mode = on
 # 设置将被调用以归档 WAL 文件的库
 # archive_library = ''
 # 设置将被调用以归档 WAL 文件的 shell 命令
@@ -306,7 +306,7 @@ wal_sender_timeout = 120s
 # 在备用服务器上忽略这些设置
 
 # 同步备用数据库的数量和潜在同步备用数据库的名称列表
-# synchronous_standby_names = 'ANY 1 (*)'
+# synchronous_standby_names = '*'
 # 应延迟 VACUUM 和 HOT 清理的事务数
 # vacuum_defer_cleanup_age = 0
 
@@ -439,7 +439,7 @@ hot_standby_feedback = on
 
 # - 其他计划选项 -
 # 设置默认统计目标  
-default_statistics_target = 100
+# default_statistics_target = 100
 # 设置默认统计目标
 # constraint_exclusion = partition
 # 设置规划器对将检索的游标行的分数的估计
