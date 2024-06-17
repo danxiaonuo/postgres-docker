@@ -180,11 +180,11 @@ bgwriter_lru_multiplier = 10.0
 # - 设置 -
 
 # 设置写入 WAL 的信息级别
-wal_level = replica
+wal_level = logical
 # 强制将更新同步到磁盘
 fsync = on
 # 设置当前事务的同步级别
-synchronous_commit = on
+synchronous_commit = off
 # 选择用于强制 WAL 更新到磁盘的方法
 # open_datasync（用open()选项O_DSYNC写 WAL 文件）
 # fdatasync（在每次提交时调用fdatasync()）
