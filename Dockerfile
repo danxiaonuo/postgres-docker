@@ -97,8 +97,8 @@ ENV PPG_DEPS=$PPG_DEPS
 
 # timescaledb依赖包
 ARG TB_DEPS="\
-    timescaledb-2-loader-postgresql-${PG_MAJOR}='2.15.3*' \
-    timescaledb-2-postgresql-${PG_MAJOR}='2.15.3*'"
+    timescaledb-2-loader-postgresql-${PG_MAJOR} \
+    timescaledb-2-postgresql-${PG_MAJOR}"
 ENV TB_DEPS=$TB_DEPS
 
 # ***** 安装依赖 *****
