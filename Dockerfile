@@ -159,6 +159,7 @@ RUN set -eux && \
     wget --no-check-certificate https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb \
     -O ${DOWNLOAD_SRC}/percona-release_latest.$(lsb_release -sc)_all.deb && \
     # 安装timescale源
+    # https://packagecloud.io/app/timescale/timescaledb/search?dist=ubuntu
     echo "deb https://packagecloud.io/timescale/timescaledb/ubuntu/ $(lsb_release -c -s) main" | sudo tee /etc/apt/sources.list.d/timescaledb.list && \
     wget --quiet -O - https://packagecloud.io/timescale/timescaledb/gpgkey | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/timescaledb.gpg && \
     # 更新源
