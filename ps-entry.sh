@@ -326,7 +326,7 @@ _main() {
 			# e.g. when '--auth=md5' or '--auth-local=md5' is used in POSTGRES_INITDB_ARGS
 			export PGPASSWORD="${PGPASSWORD:-$POSTGRES_PASSWORD}"
 
-                        export PG_MAJOR=16
+                        export PG_MAJOR=17
 			
                         ln -sfd $PGDATA/pg_hba.conf /etc/postgresql/${PG_MAJOR}/main/pg_hba.conf 
                         ln -sfd $PGDATA/pg_ident.conf /etc/postgresql/${PG_MAJOR}/main/pg_ident.conf 
