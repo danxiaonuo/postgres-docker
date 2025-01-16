@@ -243,7 +243,7 @@ archive_mode = on
 # 设置将被调用以归档 WAL 文件的库
 # archive_library = ''
 # 设置将被调用以归档 WAL 文件的 shell 命令
-archive_command = 'cp %p ../archive/%f'
+archive_command = 'cp -f %p ../archive/%f'
 # 设置在强制切换到下一个 WAL 文件之前等待的时间量
 # archive_timeout = 0 
 
@@ -251,7 +251,7 @@ archive_command = 'cp %p ../archive/%f'
 
 # 这些仅用于恢复模式
 # 设置将被调用以检索归档 WAL 文件的 shell 命令
-restore_command = 'cp %p ../archive/%f' 
+restore_command = 'cp -f ../archive/%f %p' 
 # 设置将在每个重启点执行的 shell 命令
 # archive_cleanup_command = ''
 # 设置恢复结束时执行一次的shell命令
