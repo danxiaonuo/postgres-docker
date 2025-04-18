@@ -92,6 +92,7 @@ ARG PPG_DEPS="\
     percona-pgbackrest \
     percona-pgbouncer \
     percona-pgaudit${PG_MAJOR}-set-user \
+    percona-postgresql-${PG_MAJOR}-pgvector 
     percona-pgbadger"
 ENV PPG_DEPS=$PPG_DEPS
 
